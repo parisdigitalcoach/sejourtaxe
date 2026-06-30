@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useCookieConsent } from "../hooks/useCookieConsent";
 import { X, Shield, BarChart3, Target, Check } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function CookiePreferencesModal() {
   const { consent, showModal, closePreferences, saveCustomPreferences } = useCookieConsent();
+  const { t } = useLanguage();
   
   const [prefs, setPrefs] = useState({
     analytics: true,
@@ -47,11 +49,10 @@ export default function CookiePreferencesModal() {
         {/* Title */}
         <div className="space-y-2">
           <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-black flex items-center gap-2">
-            <span>Personnaliser</span>
-            <span className="text-[#d1121d]">mes préférences</span>
+            <span>{t("cookie_modal_title")}</span>
           </h2>
           <p className="text-xs text-slate-500 font-medium leading-relaxed">
-            Nous respectons votre vie privée. Ajustez ci-dessous vos consentements concernant les cookies utilisés sur notre plateforme SejourTaxe.com.
+            {t("cookie_modal_desc")}
           </p>
         </div>
 
@@ -67,11 +68,11 @@ export default function CookiePreferencesModal() {
             </div>
             <div className="flex-1 space-y-1">
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-black uppercase tracking-wider text-black">Cookies strictement nécessaires</h3>
-                <span className="text-[10px] uppercase font-bold text-green-600 bg-green-50 px-2 py-0.5 border border-green-200">Toujours activés</span>
+                <h3 className="text-sm font-black uppercase tracking-wider text-black">{t("cookie_cat_necessary_title")}</h3>
+                <span className="text-[10px] uppercase font-bold text-green-600 bg-green-50 px-2 py-0.5 border border-green-200">{t("cookie_cat_necessary_status")}</span>
               </div>
               <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                Ces cookies sont indispensables au bon fonctionnement du site, comme la persistance de votre session de calcul et l'enregistrement de vos préférences de consentement. Ils ne stockent aucune donnée personnelle.
+                {t("cookie_cat_necessary_desc")}
               </p>
             </div>
           </div>
@@ -83,7 +84,7 @@ export default function CookiePreferencesModal() {
             </div>
             <div className="flex-1 space-y-1">
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-black uppercase tracking-wider text-black">Cookies analytiques</h3>
+                <h3 className="text-sm font-black uppercase tracking-wider text-black">{t("cookie_cat_analytics_title")}</h3>
                 
                 {/* Switch toggle */}
                 <button
@@ -102,7 +103,7 @@ export default function CookiePreferencesModal() {
                 </button>
               </div>
               <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                Utilisé par <strong>Google Analytics</strong>. Ces cookies nous permettent de mesurer l'audience de notre site, d'analyser l'utilisation générale et d'améliorer continuellement l'expérience d'utilisation de nos outils de calcul.
+                {t("cookie_cat_analytics_desc")}
               </p>
             </div>
           </div>
@@ -114,7 +115,7 @@ export default function CookiePreferencesModal() {
             </div>
             <div className="flex-1 space-y-1">
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-black uppercase tracking-wider text-black">Cookies marketing & ciblage</h3>
+                <h3 className="text-sm font-black uppercase tracking-wider text-black">{t("cookie_cat_marketing_title")}</h3>
                 
                 {/* Switch toggle */}
                 <button
@@ -133,7 +134,7 @@ export default function CookiePreferencesModal() {
                 </button>
               </div>
               <p className="text-xs text-slate-500 leading-relaxed font-medium">
-                Utilisé par <strong>Google Ads (AdSense)</strong> et <strong>Google Tag Manager</strong>. Ces cookies permettent d'afficher des annonces publicitaires personnalisées de qualité qui soutiennent le financement et la gratuité de notre site.
+                {t("cookie_cat_marketing_desc")}
               </p>
             </div>
           </div>
@@ -150,7 +151,7 @@ export default function CookiePreferencesModal() {
             id="btn-save-cookie-prefs"
           >
             <Check className="h-4 w-4" />
-            <span>Enregistrer mes choix</span>
+            <span>{t("cookie_save_btn")}</span>
           </button>
           
           <button
@@ -161,7 +162,7 @@ export default function CookiePreferencesModal() {
             className="w-full bg-black hover:bg-[#d1121d] text-white text-xs uppercase tracking-widest font-black py-4 px-6 transition-all cursor-pointer flex items-center justify-center border border-transparent"
             id="btn-accept-all-from-pref"
           >
-            Accepter tout
+            {t("cookie_btn_accept")}
           </button>
         </div>
       </div>

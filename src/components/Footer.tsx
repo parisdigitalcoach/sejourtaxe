@@ -1,6 +1,7 @@
 import React from "react";
 import { Calculator, ExternalLink, Heart, Cookie, Shield, Info, Twitter, Linkedin, Facebook } from "lucide-react";
 import { useCookieConsent } from "../hooks/useCookieConsent";
+import { useLanguage } from "../context/LanguageContext";
 
 interface FooterProps {
   navigate: (path: string) => void;
@@ -10,6 +11,7 @@ export default function Footer({ navigate }: FooterProps) {
   const currentYear = new Date().getFullYear();
   const siteVersion = (import.meta as any).env.VITE_SITE_VERSION || "1.0.0";
   const { openPreferences } = useCookieConsent();
+  const { t } = useLanguage();
 
   const twitterUrl = (import.meta as any).env.VITE_TWITTER_URL || "";
   const linkedinUrl = (import.meta as any).env.VITE_LINKEDIN_URL || "";
@@ -45,7 +47,7 @@ export default function Footer({ navigate }: FooterProps) {
               </span>
             </button>
             <p className="text-xs font-medium text-slate-500 leading-relaxed max-w-sm">
-              Outil indépendant et gratuit de calcul de la taxe de séjour en France pour tous types d'hébergements (gîtes, meublés de tourisme, hôtels, campings). Conforme aux barèmes officiels de l'État en vigueur en 2026.
+              {t("footer_desc")}
             </p>
             {(twitterUrl || linkedinUrl || facebookUrl) && (
               <div className="flex items-center gap-3 pt-2" id="footer-social-links">
@@ -93,7 +95,7 @@ export default function Footer({ navigate }: FooterProps) {
           <div className="md:col-span-4 grid grid-cols-2 gap-4" id="footer-col-nav">
             <div>
               <h3 className="text-xs font-black text-black tracking-widest uppercase mb-4">
-                Navigation
+                {t("footer_nav_title")}
               </h3>
               <ul className="space-y-3 text-xs font-bold">
                 <li>
@@ -102,7 +104,7 @@ export default function Footer({ navigate }: FooterProps) {
                     className="text-slate-500 hover:text-[#d1121d] transition-colors cursor-pointer text-left"
                     id="footer-nav-home"
                   >
-                    Accueil
+                    {t("nav_home")}
                   </button>
                 </li>
                 <li>
@@ -111,7 +113,7 @@ export default function Footer({ navigate }: FooterProps) {
                     className="text-slate-500 hover:text-[#d1121d] transition-colors cursor-pointer text-left"
                     id="footer-nav-calc"
                   >
-                    Calculateur
+                    {t("nav_calculator")}
                   </button>
                 </li>
                 <li>
@@ -129,7 +131,7 @@ export default function Footer({ navigate }: FooterProps) {
                     className="text-slate-500 hover:text-[#d1121d] transition-colors cursor-pointer text-left"
                     id="footer-nav-contact"
                   >
-                    Contact
+                    {t("nav_contact")}
                   </button>
                 </li>
               </ul>
@@ -137,7 +139,7 @@ export default function Footer({ navigate }: FooterProps) {
 
             <div>
               <h3 className="text-xs font-black text-black tracking-widest uppercase mb-4">
-                Légal & RGPD
+                {t("footer_legal_title")}
               </h3>
               <ul className="space-y-3 text-xs font-bold">
                 <li>
@@ -146,7 +148,7 @@ export default function Footer({ navigate }: FooterProps) {
                     className="text-slate-500 hover:text-[#d1121d] transition-colors cursor-pointer text-left"
                     id="footer-nav-privacy"
                   >
-                    Confidentialité
+                    {t("nav_privacy")}
                   </button>
                 </li>
                 <li>
@@ -155,7 +157,7 @@ export default function Footer({ navigate }: FooterProps) {
                     className="text-slate-500 hover:text-[#d1121d] transition-colors cursor-pointer text-left"
                     id="footer-nav-cookies"
                   >
-                    Cookies (RGPD)
+                    {t("nav_cookies")}
                   </button>
                 </li>
                 <li>
@@ -164,7 +166,7 @@ export default function Footer({ navigate }: FooterProps) {
                     className="text-slate-500 hover:text-[#d1121d] transition-colors cursor-pointer text-left"
                     id="footer-nav-legal"
                   >
-                    Mentions légales
+                    {t("nav_legal")}
                   </button>
                 </li>
                 <li>
@@ -173,7 +175,7 @@ export default function Footer({ navigate }: FooterProps) {
                     className="text-slate-500 hover:text-[#d1121d] transition-colors cursor-pointer text-left"
                     id="footer-nav-sitemap"
                   >
-                    Plan du site
+                    {t("nav_sitemap")}
                   </button>
                 </li>
               </ul>
@@ -183,10 +185,10 @@ export default function Footer({ navigate }: FooterProps) {
           {/* Cookie Preferences Column (Col span 4) */}
           <div className="md:col-span-4 space-y-4" id="footer-col-preference">
             <h3 className="text-xs font-black text-black tracking-widest uppercase">
-              Vos choix de traceurs
+              {t("footer_cookies_choices_title")}
             </h3>
             <p className="text-xs text-slate-500 leading-relaxed font-medium">
-              Conformément à la réglementation RGPD, vous disposez d'un droit complet de contrôle et de modification des traceurs que nous utilisons pour le bon fonctionnement et le financement du site.
+              {t("footer_cookies_choices_desc")}
             </p>
             <div>
               <button
@@ -195,7 +197,7 @@ export default function Footer({ navigate }: FooterProps) {
                 id="btn-footer-cookie-preferences"
               >
                 <Cookie className="h-4 w-4" />
-                <span>Gérer mes cookies</span>
+                <span>{t("footer_cookies_btn")}</span>
               </button>
             </div>
           </div>
@@ -208,7 +210,7 @@ export default function Footer({ navigate }: FooterProps) {
               <Info className="h-4 w-4" />
             </div>
             <p className="text-[11px] text-slate-500 leading-relaxed max-w-2xl font-medium">
-              Avertissement : Ce simulateur fournit des estimations indicatives. Bien que nous appliquions rigoureusement les barèmes légaux, vérifiez toujours les tarifs officiels applicables dans votre commune directement sur le portail de l'État français.
+              {t("footer_warning")}
             </p>
           </div>
           <a
@@ -218,7 +220,7 @@ export default function Footer({ navigate }: FooterProps) {
             className="shrink-0 inline-flex items-center gap-1.5 font-bold text-xs bg-black hover:bg-[#d1121d] text-white py-2.5 px-4 border border-transparent transition-colors uppercase tracking-wider"
             id="link-official-government-rates"
           >
-            <span>Tarifs officiels de l'État</span>
+            <span>{t("footer_gov_rates_btn")}</span>
             <ExternalLink className="h-3.5 w-3.5" />
           </a>
         </div>
@@ -226,12 +228,12 @@ export default function Footer({ navigate }: FooterProps) {
         {/* Bottom Bar */}
         <div className="mt-10 pt-6 border-t border-black/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] font-mono uppercase tracking-wider text-slate-400">
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4" id="footer-credits">
-            <p>© {currentYear} SejourTaxe.com - Tous droits réservés.</p>
+            <p>© {currentYear} SejourTaxe.com - {t("footer_rights")}</p>
             <span className="hidden sm:inline text-slate-300">|</span>
             <p className="font-bold text-slate-500">Version {siteVersion}</p>
           </div>
           <p className="flex items-center gap-1.5 font-bold">
-            <span>Développé avec professionnalisme pour les hébergeurs français</span>
+            <span>{t("footer_developed")}</span>
             <Heart className="h-3 w-3 text-[#d1121d] fill-[#d1121d]" />
           </p>
         </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import { useCookieConsent } from "../hooks/useCookieConsent";
 import { Cookie, Settings, Check, Ban } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 interface CookieConsentProps {
   navigate: (path: string) => void;
@@ -8,6 +9,7 @@ interface CookieConsentProps {
 
 export default function CookieConsent({ navigate }: CookieConsentProps) {
   const { showBanner, acceptAll, denyAll, openPreferences } = useCookieConsent();
+  const { t } = useLanguage();
 
   if (!showBanner) return null;
 
@@ -24,11 +26,11 @@ export default function CookieConsent({ navigate }: CookieConsentProps) {
             <div className="bg-[#d1121d] text-white p-1">
               <Cookie className="h-4 w-4" />
             </div>
-            <span className="text-xs font-black uppercase tracking-wider text-black">Gestion des Cookies (RGPD)</span>
+            <span className="text-xs font-black uppercase tracking-wider text-black">{t("cookie_banner_title")}</span>
           </div>
           
           <p className="text-xs text-slate-600 font-medium leading-relaxed max-w-4xl">
-            Nous utilisons des cookies pour améliorer votre expérience, mesurer l'audience et afficher des publicités personnalisées. Vous pouvez accepter, refuser ou personnaliser vos préférences à tout moment.
+            {t("cookie_banner_desc")}
           </p>
           
           {/* Policy Links */}
@@ -38,7 +40,7 @@ export default function CookieConsent({ navigate }: CookieConsentProps) {
               className="text-slate-500 hover:text-[#d1121d] hover:underline cursor-pointer text-left"
               id="link-privacy-policy-cookies"
             >
-              Politique de confidentialité
+              {t("nav_privacy")}
             </button>
             <span className="text-slate-300">|</span>
             <button 
@@ -46,7 +48,7 @@ export default function CookieConsent({ navigate }: CookieConsentProps) {
               className="text-slate-500 hover:text-[#d1121d] hover:underline cursor-pointer text-left"
               id="link-cookies-policy-cookies"
             >
-              Politique des cookies
+              {t("nav_cookies")}
             </button>
           </div>
         </div>
@@ -60,7 +62,7 @@ export default function CookieConsent({ navigate }: CookieConsentProps) {
             id="btn-customize-cookies"
           >
             <Settings className="h-3.5 w-3.5 text-slate-500" />
-            <span>⚙ Personnaliser</span>
+            <span>{t("cookie_btn_customize")}</span>
           </button>
 
           {/* ❌ Refuser */}
@@ -70,7 +72,7 @@ export default function CookieConsent({ navigate }: CookieConsentProps) {
             id="btn-refuse-cookies"
           >
             <Ban className="h-3.5 w-3.5 text-slate-500" />
-            <span>❌ Refuser</span>
+            <span>{t("cookie_btn_refuse")}</span>
           </button>
 
           {/* ✅ Accepter tout */}
@@ -80,7 +82,7 @@ export default function CookieConsent({ navigate }: CookieConsentProps) {
             id="btn-accept-all-cookies"
           >
             <Check className="h-3.5 w-3.5" />
-            <span>✅ Accepter tout</span>
+            <span>{t("cookie_btn_accept")}</span>
           </button>
         </div>
 

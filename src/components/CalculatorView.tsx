@@ -566,11 +566,11 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
   return (
     <div className="space-y-12 print:space-y-6">
       {/* Page Header (Hidden on print) */}
-      <div className="py-8 border-b border-black/10 dark:border-white/10 print:hidden transition-colors">
-        <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-black dark:text-white uppercase leading-[0.9]">
+      <div className="py-8 border-b border-black/10 print:hidden transition-colors">
+        <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-black uppercase leading-[0.9]">
           Simulateur <span className="text-[#d1121d]">Intégral</span>
         </h1>
-        <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base mt-3 max-w-xl font-medium">
+        <p className="text-slate-600 text-sm sm:text-base mt-3 max-w-xl font-medium">
           Renseignez les détails de votre hébergement et les paramètres de séjour pour calculer le montant de la taxe de séjour exigible en direct.
         </p>
       </div>
