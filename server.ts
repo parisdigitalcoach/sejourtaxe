@@ -1,7 +1,6 @@
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
-import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
 // Load environment variables
@@ -93,34 +92,20 @@ app.post("/api/contact", async (req, res) => {
       });
     }
 
-    // 4. Lazy SMTP Credentials Verification (Fail fast with clear error if missing)
+    // 4. Lazy Brevo API Key Verification (Fail fast with clear error if missing)
     const requiredEnv = [
-      "SMTP_HOST",
-      "SMTP_PORT",
-      "SMTP_USER",
-      "SMTP_PASS",
+      "BREVO_API_KEY",
       "CONTACT_TO_EMAIL",
       "CONTACT_FROM_EMAIL"
     ];
     const missingEnv = requiredEnv.filter((key) => !process.env[key]);
     if (missingEnv.length > 0) {
-      console.error(`[SMTP Error] Configuration manquante : ${missingEnv.join(", ")}`);
+      console.error(`[Brevo API Error] Configuration manquante : ${missingEnv.join(", ")}`);
       return res.status(500).json({ 
-        error: "Le serveur de messagerie n'est pas configuré. Veuillez contacter l'administrateur.",
+        error: "Le service de messagerie n'est pas configuré. Veuillez contacter l'administrateur.",
         details: `Variables manquantes : ${missingEnv.join(", ")}`
       });
     }
-
-    // 5. Setup nodemailer transporter (Lazy initialization)
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || "587", 10),
-      secure: process.env.SMTP_SECURE === "true",
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
-      }
-    });
 
     // Subject mappings for cleaner display
     const sujetLabels: Record<string, string> = {
@@ -131,26 +116,9 @@ app.post("/api/contact", async (req, res) => {
     };
     const humanReadableSubject = sujetLabels[sujet] || sujet;
 
-    // Compose Email Text & HTML
+    // Compose Email HTML
     const emailSubject = `[SejourTaxe] ${humanReadableSubject}`;
-    const communeText = commune ? `Commune concernée : ${commune}\n` : "";
     const communeHtml = commune ? `<p><strong>Commune concernée :</strong> ${commune}</p>` : "";
-
-    const textBody = `
-Nouveau message de contact reçu sur SejourTaxe.com
-
-Nom : ${nom}
-Email : ${email}
-Objet : ${humanReadableSubject}
-Date : ${dateStr}
-IP Client : ${clientIp}
-User-Agent : ${userAgent}
-${communeText}
----------------------------------------------------------
-Message :
-${message}
----------------------------------------------------------
-    `.trim();
 
     const htmlBody = `
 <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; padding: 20px;">
@@ -172,7 +140,7 @@ ${message}
       <td style="padding: 6px 0; font-weight: bold;">Date :</td>
       <td style="padding: 6px 0;">${dateStr}</td>
     </tr>
-    ${commune ? `<tr><td style="padding: 6px 0; font-weight: bold;">Commune :</td><td style="padding: 6px 0;">${commune}</td></tr>` : ""}
+    ${communeHtml}
     <tr>
       <td style="padding: 6px 0; font-weight: bold;">IP Client :</td>
       <td style="padding: 6px 0; font-family: monospace; font-size: 12px;">${clientIp}</td>
@@ -192,21 +160,43 @@ ${message}
 </div>
     `.trim();
 
-    // Send Mail
-    await transporter.sendMail({
-      from: `"${nom} via SejourTaxe" <${process.env.CONTACT_FROM_EMAIL}>`,
-      to: process.env.CONTACT_TO_EMAIL,
-      replyTo: email, // Set Reply-To with the sender email as requested
-      subject: emailSubject,
-      text: textBody,
-      html: htmlBody
+    // Call Brevo API
+    const brevoResponse = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "api-key": process.env.BREVO_API_KEY!,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        sender: {
+          name: "SejourTaxe",
+          email: process.env.CONTACT_FROM_EMAIL!,
+        },
+        to: [
+          {
+            email: process.env.CONTACT_TO_EMAIL!,
+          },
+        ],
+        replyTo: {
+          email,
+          name: nom,
+        },
+        subject: emailSubject,
+        htmlContent: htmlBody,
+      }),
     });
 
-    console.log(`[Email Sent] Successfully sent contact email from ${email} (IP: ${clientIp})`);
+    if (!brevoResponse.ok) {
+      const errorText = await brevoResponse.text();
+      throw new Error(`Erreur Brevo API: ${errorText}`);
+    }
+
+    console.log(`[Email Sent] Successfully sent contact email from ${email} via Brevo (IP: ${clientIp})`);
     return res.status(200).json({ success: true, message: "Message envoyé avec succès." });
 
   } catch (error: any) {
-    console.error("[SMTP Server Error] Failed to send email:", error);
+    console.error("[Brevo Error] Failed to send email:", error);
     return res.status(500).json({ 
       error: "Une erreur interne est survenue lors de l'envoi de votre e-mail.",
       details: error.message || error

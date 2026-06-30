@@ -717,7 +717,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
           </div>
 
           {/* Occupants card */}
-          <div className="bg-[#f6f6f6] p-6 space-y-6 border border-black/10">
+          <div className="bg-white p-6 space-y-6 border border-black/30">
             <h3 className="text-xs font-black text-black uppercase tracking-widest border-b border-black/10 pb-2">Hébergement & Occupants</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               
@@ -945,7 +945,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
             </div>
 
             {result.prixParPersonneParNuit > 0 && (
-              <div className="bg-slate-50 p-4 border border-black/10 text-xs">
+              <div className="bg-white p-4 border border-black/30 text-xs">
                 <span className="text-slate-500 block uppercase tracking-wider text-[9px] mb-1">Loyer HT / voyageur / nuit :</span>
                 <span className="font-mono text-black text-sm font-bold">{result.prixParPersonneParNuit.toFixed(2)} €</span>
               </div>
@@ -1020,7 +1020,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
               ))}
             </div>
 
-            <div className="bg-[#fcfcfc] border-l-2 border-[#d1121d] p-4 text-xs text-slate-500 space-y-2 print:border-black print:bg-slate-50">
+            <div className="bg-white border-l-2 border-[#d1121d] p-4 text-xs text-slate-500 space-y-2 print:border-black print:bg-slate-50 border border-black/15">
               <div className="flex gap-1.5 text-[#d1121d] font-bold uppercase tracking-wider text-[10px]">
                 <AlertTriangle className="h-4 w-4 shrink-0" />
                 <span>Notice d'usage légal</span>

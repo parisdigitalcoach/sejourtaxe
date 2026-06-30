@@ -14,6 +14,7 @@ import { updateSEO } from "./lib/seo";
 
 // GDPR Consent Provider & Components
 import { CookieConsentProvider } from "./context/CookieConsentContext";
+import { LanguageConsentProvider } from "./context/LanguageContext";
 import CookieConsent from "./components/CookieConsent";
 import CookiePreferencesModal from "./components/CookiePreferencesModal";
 
@@ -37,6 +38,12 @@ export default function App() {
   useEffect(() => {
     trackPageView(currentPath);
     updateSEO(currentPath);
+
+    const handleLangChange = () => {
+      updateSEO(currentPath);
+    };
+    window.addEventListener("languagechange", handleLangChange);
+    return () => window.removeEventListener("languagechange", handleLangChange);
   }, [currentPath]);
 
   // Force light mode
@@ -83,29 +90,31 @@ export default function App() {
   };
 
   return (
-    <CookieConsentProvider>
-      <div className="min-h-screen bg-[#fafafa] flex flex-col font-sans text-black selection:bg-[#d1121d]/10 selection:text-[#d1121d] transition-colors duration-200">
-        {/* Dynamic GTM noscript is handled in integrations.ts */}
-        
-        {/* Header with Nav */}
-        <Header currentPath={currentPath} navigate={navigate} />
+    <LanguageConsentProvider>
+      <CookieConsentProvider>
+        <div className="min-h-screen bg-[#fafafa] flex flex-col font-sans text-black selection:bg-[#d1121d]/10 selection:text-[#d1121d] transition-colors duration-200">
+          {/* Dynamic GTM noscript is handled in integrations.ts */}
+          
+          {/* Header with Nav */}
+          <Header currentPath={currentPath} navigate={navigate} />
 
-        {/* Main Layout Stage */}
-        <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-          <div className="animate-fade-in">
-            {renderView()}
-          </div>
-        </main>
+          {/* Main Layout Stage */}
+          <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+            <div className="animate-fade-in">
+              {renderView()}
+            </div>
+          </main>
 
-        {/* Footer Block */}
-        <Footer navigate={navigate} />
+          {/* Footer Block */}
+          <Footer navigate={navigate} />
 
-        {/* Cookie Consent Banner */}
-        <CookieConsent navigate={navigate} />
+          {/* Cookie Consent Banner */}
+          <CookieConsent navigate={navigate} />
 
-        {/* Cookie Preferences Modal */}
-        <CookiePreferencesModal />
-      </div>
-    </CookieConsentProvider>
+          {/* Cookie Preferences Modal */}
+          <CookiePreferencesModal />
+        </div>
+      </CookieConsentProvider>
+    </LanguageConsentProvider>
   );
 }

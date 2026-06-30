@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Calculator, Menu, X, BookOpen, Mail } from "lucide-react";
+import { useLanguage, Language } from "../context/LanguageContext";
 
 interface HeaderProps {
   currentPath: string;
@@ -8,12 +9,22 @@ interface HeaderProps {
 
 export default function Header({ currentPath, navigate }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
+
+  const languages = [
+    { code: "fr", label: "FR 🇫🇷" },
+    { code: "en", label: "EN 🇬🇧" },
+    { code: "de", label: "DE 🇩🇪" },
+    { code: "es", label: "ES 🇪🇸" },
+    { code: "it", label: "IT 🇮🇹" },
+    { code: "zh", label: "ZH 🇨🇳" },
+  ];
 
   const navItems = [
-    { label: "Accueil", path: "/" },
-    { label: "Calculateur", path: "/calculateur-taxe-de-sejour", icon: Calculator },
-    { label: "Comment calculer ?", path: "/comment-calculer-la-taxe-de-sejour", icon: BookOpen },
-    { label: "Contact", path: "/contact", icon: Mail },
+    { label: t("nav_home"), path: "/" },
+    { label: t("nav_calculator"), path: "/calculateur-taxe-de-sejour", icon: Calculator },
+    { label: t("nav_guide"), path: "/comment-calculer-la-taxe-de-sejour", icon: BookOpen },
+    { label: t("nav_contact"), path: "/contact", icon: Mail },
   ];
 
   const handleLinkClick = (path: string) => {
@@ -59,18 +70,47 @@ export default function Header({ currentPath, navigate }: HeaderProps) {
               );
             })}
 
+            {/* Language Switcher Dropdown */}
+            <div className="flex items-center px-4 border-r border-black/5">
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value as Language)}
+                className="bg-transparent text-xs font-black uppercase tracking-wider text-black border border-black/15 hover:border-black/40 rounded-none px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-black cursor-pointer bg-[#fbfbfb]"
+              >
+                {languages.map((lang) => (
+                  <option key={lang.code} value={lang.code} className="text-black font-medium">
+                    {lang.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div className="flex items-center pl-4">
               <button
                 onClick={() => handleLinkClick("/calculateur-taxe-de-sejour")}
                 className="bg-black text-white hover:bg-[#d1121d] px-5 py-2.5 text-xs uppercase tracking-wider font-black transition-all cursor-pointer"
               >
-                Calculer ma taxe
+                {t("nav_calculate_btn")}
               </button>
             </div>
           </nav>
 
           {/* Mobile Actions: Hamburger */}
           <div className="flex md:hidden items-center gap-2">
+            {/* Mobile Language Switcher Quick Select */}
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value as Language)}
+              className="bg-transparent text-xs font-black uppercase tracking-wider text-black border border-black/15 rounded-none px-2 py-1 focus:outline-none cursor-pointer bg-[#fbfbfb]"
+              aria-label="Select language"
+            >
+              {languages.map((lang) => (
+                <option key={lang.code} value={lang.code}>
+                  {lang.label.split(" ")[1]} {lang.code.toUpperCase()}
+                </option>
+              ))}
+            </select>
+
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 text-black hover:text-[#d1121d] hover:bg-black/5 focus:outline-none"
@@ -107,7 +147,7 @@ export default function Header({ currentPath, navigate }: HeaderProps) {
               onClick={() => handleLinkClick("/calculateur-taxe-de-sejour")}
               className="w-full text-center bg-black text-white hover:bg-[#d1121d] py-3 text-xs uppercase tracking-wider font-black"
             >
-              Calculer ma taxe de séjour
+              {t("nav_calculate_btn")}
             </button>
           </div>
         </div>
