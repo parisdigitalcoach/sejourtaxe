@@ -1,0 +1,6 @@
+{
+  "name": "SejourTaxe",
+  "description": "Calculateur de taxe de séjour en France - Calculez rapidement et simplement la taxe de séjour pour vos locations, hôtels, gîtes ou chambres d'hôtes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

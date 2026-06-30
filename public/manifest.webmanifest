@@ -1,0 +1,18 @@
+{
+  "name": "SejourTaxe — Simulateur de Taxe de Séjour",
+  "short_name": "SejourTaxe",
+  "description": "Calculateur officiel de la taxe de séjour en France (2026)",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#d1121d",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
