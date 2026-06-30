@@ -581,15 +581,15 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         {/* Left Column: Form Controls (Hidden on Print) */}
-        <div className="lg:col-span-7 border border-black/10 dark:border-white/10 p-6 sm:p-8 space-y-8 bg-white dark:bg-[#151515] print:hidden transition-colors">
-          <div className="flex items-center justify-between border-b border-black dark:border-white pb-4">
-            <h2 className="text-base font-black text-black dark:text-white uppercase tracking-wider flex items-center gap-2">
+        <div className="lg:col-span-7 border border-black p-6 sm:p-8 space-y-8 bg-white print:hidden transition-colors">
+          <div className="flex items-center justify-between border-b border-black pb-4">
+            <h2 className="text-base font-black text-black uppercase tracking-wider flex items-center gap-2">
               <Calculator className="h-4 w-4 text-[#d1121d]" />
               <span>Paramètres du Séjour</span>
             </h2>
             <button
               onClick={resetForm}
-              className="text-xs text-slate-500 dark:text-slate-400 hover:text-[#d1121d] font-bold uppercase tracking-widest flex items-center gap-1 cursor-pointer transition-colors"
+              className="text-xs text-slate-500 hover:text-[#d1121d] font-bold uppercase tracking-widest flex items-center gap-1 cursor-pointer transition-colors"
             >
               <RefreshCw className="h-3 w-3" />
               <span>Réinitialiser</span>
@@ -600,7 +600,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
             
             {/* 35,000+ Communes Autocomplete Input */}
             <div className="sm:col-span-2 relative" ref={autocompleteRef}>
-              <label className="block text-xs font-bold uppercase tracking-wider text-black dark:text-white mb-2 flex items-center gap-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-black mb-2 flex items-center gap-1.5">
                 <MapPin className="h-3.5 w-3.5 text-[#d1121d]" />
                 <span>Commune ou Code Postal</span>
               </label>
@@ -619,7 +619,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                   }}
                   onKeyDown={handleKeyDown}
                   placeholder="Ex: Paris, Strasbourg, Nice..."
-                  className="w-full bg-[#fcfcfc] dark:bg-neutral-900 border border-black/25 dark:border-white/20 rounded-none px-4 py-3 pl-10 text-sm text-black dark:text-white focus:outline-none focus:border-[#d1121d] transition-all font-bold"
+                  className="w-full bg-[#fcfcfc] border border-black/30 rounded-none px-4 py-3 pl-10 text-sm text-black focus:outline-none focus:border-[#d1121d] transition-all font-bold"
                 />
                 <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                 {isLoadingCommunes && (
@@ -629,7 +629,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
 
               {/* Suggestions dropdown list */}
               {isSuggestionsOpen && (searchQuery.trim() !== "" || communesList.length > 0) && (
-                <div className="absolute z-50 w-full mt-1 bg-white dark:bg-neutral-900 border border-black dark:border-white/20 shadow-xl max-h-60 overflow-y-auto rounded-none transition-all">
+                <div className="absolute z-50 w-full mt-1 bg-white border border-black shadow-xl max-h-60 overflow-y-auto rounded-none transition-all">
                   {isLoadingCommunes ? (
                     <div className="p-4 text-xs font-bold text-slate-400 text-center uppercase tracking-wider">Chargement des 35 000 communes...</div>
                   ) : filteredSuggestions.length > 0 ? (
@@ -637,10 +637,10 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                       <button
                         key={suggestion.id}
                         onClick={() => selectCommune(suggestion)}
-                        className={`w-full text-left px-4 py-3 text-xs flex justify-between items-center transition-all cursor-pointer border-b border-black/5 dark:border-white/5 ${
+                        className={`w-full text-left px-4 py-3 text-xs flex justify-between items-center transition-all cursor-pointer border-b border-black/5 ${
                           index === activeSuggestionIndex
                             ? "bg-[#d1121d] text-white"
-                            : "text-black dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/5"
+                            : "text-black hover:bg-black/5"
                         }`}
                       >
                         <span className="font-bold">{suggestion.name}</span>
@@ -665,7 +665,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                             setSearchQuery(key);
                             setIsSuggestionsOpen(false);
                           }}
-                          className="w-full text-left px-3 py-2 text-xs font-bold text-black dark:text-white hover:bg-[#d1121d] hover:text-white transition-all flex justify-between"
+                          className="w-full text-left px-3 py-2 text-xs font-bold text-black hover:bg-[#d1121d] hover:text-white transition-all flex justify-between"
                         >
                           <span>{COMMUNE_PRESETS[key].name}</span>
                           <span className="text-[10px] text-slate-400 font-mono font-normal">{COMMUNE_PRESETS[key].region}</span>
@@ -679,13 +679,13 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
 
             {/* Type d'hébergement */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-black dark:text-white mb-2">
+              <label className="block text-xs font-bold uppercase tracking-wider text-black mb-2">
                 Type d'établissement
               </label>
               <select
                 value={hebergementType}
                 onChange={(e) => setHebergementType(e.target.value)}
-                className="w-full bg-[#fcfcfc] dark:bg-neutral-900 border border-black/25 dark:border-white/20 rounded-none px-4 py-3 text-sm text-black dark:text-white focus:outline-none focus:border-[#d1121d] transition-all font-bold"
+                className="w-full bg-[#fcfcfc] border border-black/30 rounded-none px-4 py-3 text-sm text-black focus:outline-none focus:border-[#d1121d] transition-all font-bold"
               >
                 <option value="Meublé de tourisme">Meublé de tourisme</option>
                 <option value="Hôtel">Hôtel</option>
@@ -697,13 +697,13 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
 
             {/* Classement */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-black dark:text-white mb-2">
+              <label className="block text-xs font-bold uppercase tracking-wider text-black mb-2">
                 Classement officiel
               </label>
               <select
                 value={classement}
                 onChange={(e) => setClassement(e.target.value)}
-                className="w-full bg-[#fcfcfc] dark:bg-neutral-900 border border-black/25 dark:border-white/20 rounded-none px-4 py-3 text-sm focus:outline-none focus:border-[#d1121d] transition-all font-black text-[#d1121d] dark:text-[#d1121d]"
+                className="w-full bg-[#fcfcfc] border border-black/30 rounded-none px-4 py-3 text-sm focus:outline-none focus:border-[#d1121d] transition-all font-black text-[#d1121d]"
               >
                 <option value="Non classé">Non classé (Proportionnel)</option>
                 <option value="1 étoile">1 étoile</option>
@@ -717,14 +717,14 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
           </div>
 
           {/* Occupants card */}
-          <div className="bg-[#f6f6f6] dark:bg-neutral-900/40 p-6 space-y-6">
-            <h3 className="text-xs font-black text-black dark:text-white uppercase tracking-widest border-b border-black/10 dark:border-white/10 pb-2">Hébergement & Occupants</h3>
+          <div className="bg-[#f6f6f6] p-6 space-y-6 border border-black/10">
+            <h3 className="text-xs font-black text-black uppercase tracking-widest border-b border-black/10 pb-2">Hébergement & Occupants</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               
               {/* Prix Total HT */}
               {modeCalcul === "pourcentage" && (
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-black dark:text-white mb-2 flex items-center gap-1">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-black mb-2 flex items-center gap-1">
                     <Euro className="h-4 w-4 text-[#d1121d]" />
                     <span>Loyer total HT (€)</span>
                   </label>
@@ -734,9 +734,9 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                     step="0.01"
                     value={prixTotalHT}
                     onChange={(e) => setPrixTotalHT(Math.max(0, parseFloat(e.target.value) || 0))}
-                    className="w-full bg-white dark:bg-neutral-900 border border-black/25 dark:border-white/20 rounded-none px-4 py-3 text-sm text-black dark:text-white font-extrabold focus:outline-none focus:border-[#d1121d] transition-all"
+                    className="w-full bg-white border border-black/30 rounded-none px-4 py-3 text-sm text-black font-extrabold focus:outline-none focus:border-[#d1121d] transition-all"
                   />
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2 font-medium">
+                  <p className="text-[11px] text-slate-500 mt-2 font-medium">
                     Nécessaire pour le calcul proportionnel de taxe meublés non classés de la commune.
                   </p>
                 </div>
@@ -744,7 +744,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
 
               {/* Adultes */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black dark:text-white mb-2 flex items-center gap-1">
+                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-2 flex items-center gap-1">
                   <Users className="h-4 w-4 text-slate-500" />
                   <span>Adultes (18 ans et plus)</span>
                 </label>
@@ -753,13 +753,13 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                   min="1"
                   value={nombreAdultes}
                   onChange={(e) => setNombreAdultes(Math.max(1, parseInt(e.target.value) || 1))}
-                  className="w-full bg-white dark:bg-neutral-900 border border-black/25 dark:border-white/20 rounded-none px-4 py-3 text-sm text-black dark:text-white font-extrabold focus:outline-none focus:border-[#d1121d] transition-all"
+                  className="w-full bg-white border border-black/30 rounded-none px-4 py-3 text-sm text-black font-extrabold focus:outline-none focus:border-[#d1121d] transition-all"
                 />
               </div>
 
               {/* Enfants */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-black dark:text-white mb-2 flex items-center gap-1">
+                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-2 flex items-center gap-1">
                   <Users className="h-4 w-4 text-slate-400" />
                   <span>Enfants (Moins de 18 ans)</span>
                 </label>
@@ -768,13 +768,13 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                   min="0"
                   value={nombreEnfants}
                   onChange={(e) => setNombreEnfants(Math.max(0, parseInt(e.target.value) || 0))}
-                  className="w-full bg-white dark:bg-neutral-900 border border-black/25 dark:border-white/20 rounded-none px-4 py-3 text-sm text-black dark:text-white font-extrabold focus:outline-none focus:border-[#d1121d] transition-all"
+                  className="w-full bg-white border border-black/30 rounded-none px-4 py-3 text-sm text-black font-extrabold focus:outline-none focus:border-[#d1121d] transition-all"
                 />
               </div>
 
               {/* Nuits */}
               <div className="sm:col-span-2">
-                <label className="block text-xs font-bold uppercase tracking-wider text-black dark:text-white mb-2 flex items-center gap-1">
+                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-2 flex items-center gap-1">
                   <Moon className="h-4 w-4 text-slate-500" />
                   <span>Nombre de nuits du séjour</span>
                 </label>
@@ -783,15 +783,15 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                   min="1"
                   value={nombreNuits}
                   onChange={(e) => setNombreNuits(Math.max(1, parseInt(e.target.value) || 1))}
-                  className="w-full bg-white dark:bg-neutral-900 border border-black/25 dark:border-white/20 rounded-none px-4 py-3 text-sm text-black dark:text-white font-extrabold focus:outline-none focus:border-[#d1121d] transition-all"
+                  className="w-full bg-white border border-black/30 rounded-none px-4 py-3 text-sm text-black font-extrabold focus:outline-none focus:border-[#d1121d] transition-all"
                 />
               </div>
             </div>
           </div>
 
           {/* Advanced rates (Editable details) */}
-          <div className="border-t border-black/10 dark:border-white/10 pt-6 space-y-6">
-            <h3 className="text-xs font-black text-black dark:text-white uppercase tracking-widest flex items-center gap-1.5">
+          <div className="border-t border-black/10 pt-6 space-y-6">
+            <h3 className="text-xs font-black text-black uppercase tracking-widest flex items-center gap-1.5">
               <Info className="h-4 w-4 text-[#d1121d]" />
               <span>Détail des barèmes fiscaux applicables</span>
             </h3>
@@ -800,7 +800,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
               {/* Taux fixe ou Pourcentage */}
               {modeCalcul === "fixe" ? (
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1.5">
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">
                     Taux fixe (€ / nuit)
                   </label>
                   <input
@@ -809,13 +809,13 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                     step="0.01"
                     value={tauxFixe}
                     onChange={(e) => setTauxFixe(Math.max(0, parseFloat(e.target.value) || 0))}
-                    className="w-full bg-[#fbfbfb] dark:bg-neutral-900 border border-black/15 dark:border-white/20 rounded-none px-3 py-2 text-xs text-black dark:text-white font-bold focus:outline-none"
+                    className="w-full bg-[#fbfbfb] border border-black/20 rounded-none px-3 py-2 text-xs text-black font-bold focus:outline-none"
                   />
                 </div>
               ) : (
                 <>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1.5 flex items-center gap-0.5">
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5 flex items-center gap-0.5">
                       <Percent className="h-3 w-3 text-slate-400" />
                       <span>Taux pourcentage</span>
                     </label>
@@ -825,11 +825,11 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                       step="0.1"
                       value={pourcentage}
                       onChange={(e) => setPourcentage(Math.max(0, parseFloat(e.target.value) || 0))}
-                      className="w-full bg-[#fbfbfb] dark:bg-neutral-900 border border-black/15 dark:border-white/20 rounded-none px-3 py-2 text-xs text-black dark:text-white font-bold focus:outline-none"
+                      className="w-full bg-[#fbfbfb] border border-black/20 rounded-none px-3 py-2 text-xs text-black font-bold focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1.5">
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">
                       Plafond légal (€)
                     </label>
                     <input
@@ -838,7 +838,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                       step="0.01"
                       value={plafond}
                       onChange={(e) => setPlafond(Math.max(0, parseFloat(e.target.value) || 0))}
-                      className="w-full bg-[#fbfbfb] dark:bg-neutral-900 border border-black/15 dark:border-white/20 rounded-none px-3 py-2 text-xs text-black dark:text-white font-bold focus:outline-none"
+                      className="w-full bg-[#fbfbfb] border border-black/20 rounded-none px-3 py-2 text-xs text-black font-bold focus:outline-none"
                     />
                   </div>
                 </>
@@ -846,16 +846,16 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
 
               {/* Taxe additionnelle Départementale */}
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1.5">
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">
                   Taxe dép. (CD)
                 </label>
-                <div className="flex items-center bg-[#fbfbfb] dark:bg-neutral-900 border border-black/15 dark:border-white/20 rounded-none px-2.5">
+                <div className="flex items-center bg-[#fbfbfb] border border-black/20 rounded-none px-2.5">
                   <input
                     type="number"
                     min="0"
                     value={taxeAdditionnelleDepartementale}
                     onChange={(e) => setTaxeAdditionnelleDepartementale(Math.max(0, parseFloat(e.target.value) || 0))}
-                    className="w-full bg-transparent border-0 py-2 text-xs text-black dark:text-white font-bold focus:outline-none"
+                    className="w-full bg-transparent border-0 py-2 text-xs text-black font-bold focus:outline-none"
                   />
                   <span className="text-xs text-slate-400 font-bold">%</span>
                 </div>
@@ -863,16 +863,16 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
 
               {/* Taxe additionnelle Régionale */}
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1.5">
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">
                   Taxe rég.
                 </label>
-                <div className="flex items-center bg-[#fbfbfb] dark:bg-neutral-900 border border-black/15 dark:border-white/20 rounded-none px-2.5">
+                <div className="flex items-center bg-[#fbfbfb] border border-black/20 rounded-none px-2.5">
                   <input
                     type="number"
                     min="0"
                     value={taxeAdditionnelleRegionale}
                     onChange={(e) => setTaxeAdditionnelleRegionale(Math.max(0, parseFloat(e.target.value) || 0))}
-                    className="w-full bg-transparent border-0 py-2 text-xs text-black dark:text-white font-bold focus:outline-none"
+                    className="w-full bg-transparent border-0 py-2 text-xs text-black font-bold focus:outline-none"
                   />
                   <span className="text-xs text-slate-400 font-bold">%</span>
                 </div>
@@ -880,23 +880,23 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
 
               {/* Taxe additionnelle Transport */}
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1.5">
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">
                   Taxe transport
                 </label>
-                <div className="flex items-center bg-[#fbfbfb] dark:bg-neutral-900 border border-black/15 dark:border-white/20 rounded-none px-2.5">
+                <div className="flex items-center bg-[#fbfbfb] border border-black/20 rounded-none px-2.5">
                   <input
                     type="number"
                     min="0"
                     value={taxeAdditionnelleTransport}
                     onChange={(e) => setTaxeAdditionnelleTransport(Math.max(0, parseFloat(e.target.value) || 0))}
-                    className="w-full bg-transparent border-0 py-2 text-xs text-black dark:text-white font-bold focus:outline-none"
+                    className="w-full bg-transparent border-0 py-2 text-xs text-black font-bold focus:outline-none"
                   />
                   <span className="text-xs text-slate-400 font-bold">%</span>
                 </div>
               </div>
             </div>
 
-            <p className="text-[10px] text-slate-400 dark:text-slate-500 italic">
+            <p className="text-[10px] text-slate-500 italic">
               * Les taux réglementaires locaux ont été automatiquement pré-remplis pour la commune de <strong className="text-[#d1121d]">{selectedCommuneName}</strong>. Vous pouvez modifier manuellement ces pourcentages à votre convenance.
             </p>
           </div>
@@ -905,16 +905,16 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
         {/* Right Column: Calculation Results (Black card with clean white layouts & Red Title) */}
         <div className="lg:col-span-5 space-y-8">
           
-          {/* Main estimation receipt (Clean for printing too) */}
-          <div className="bg-black text-white rounded-none p-6 sm:p-8 space-y-6 print:bg-white print:text-black print:border print:border-black print:p-6 transition-colors">
-            <span className="text-[10px] uppercase tracking-widest font-black text-[#d1121d] flex items-center gap-1.5 print:hidden">
+          {/* Main estimation receipt (Clean and white) */}
+          <div className="bg-white text-black border border-black p-6 sm:p-8 space-y-6 transition-colors" id="calc-result-card">
+            <span className="text-[10px] uppercase tracking-widest font-black text-[#d1121d] flex items-center gap-1.5">
               <ShieldCheck className="h-4 w-4" />
               <span>Rapport d'estimation</span>
             </span>
 
             <div>
-              <p className="text-xs uppercase tracking-wider text-slate-400 print:text-slate-600 font-bold">Estimation Taxe Totale</p>
-              <h3 className="text-5xl font-black tracking-tight mt-2 text-white print:text-black">
+              <p className="text-xs uppercase tracking-wider text-slate-500 font-bold">Estimation Taxe Totale</p>
+              <h3 className="text-5xl font-black tracking-tight mt-2 text-black">
                 {result.taxeTotale.toFixed(2)} <span className="text-[#d1121d] font-bold">€</span>
               </h3>
             </div>
@@ -925,61 +925,65 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
               <p className="text-[10px] text-slate-500">Ville: {selectedCommuneName} | Catégorie: {hebergementType} ({classement})</p>
             </div>
 
-            <div className="border-t border-white/10 dark:border-white/10 print:border-black/25 pt-6 grid grid-cols-2 gap-y-6 gap-x-4 text-xs">
+            <div className="border-t border-black/10 pt-6 grid grid-cols-2 gap-y-6 gap-x-4 text-xs">
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-slate-400 print:text-slate-500 block mb-1">Par adulte / nuit</span>
-                <span className="font-extrabold text-white print:text-black text-sm">{result.taxeParAdulteParNuit.toFixed(3)} €</span>
+                <span className="text-[10px] uppercase tracking-widest text-slate-500 block mb-1">Par adulte / nuit</span>
+                <span className="font-extrabold text-black text-sm">{result.taxeParAdulteParNuit.toFixed(3)} €</span>
               </div>
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-slate-400 print:text-slate-500 block mb-1">Adultes taxés</span>
-                <span className="font-extrabold text-white print:text-black text-sm">{result.nombreAdultesTaxables}</span>
+                <span className="text-[10px] uppercase tracking-widest text-slate-500 block mb-1">Adultes taxés</span>
+                <span className="font-extrabold text-black text-sm">{result.nombreAdultesTaxables}</span>
               </div>
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-slate-400 print:text-slate-500 block mb-1">Nuits du séjour</span>
-                <span className="font-extrabold text-white print:text-black text-sm">{result.nombreNuits}</span>
+                <span className="text-[10px] uppercase tracking-widest text-slate-500 block mb-1">Nuits du séjour</span>
+                <span className="font-extrabold text-black text-sm">{result.nombreNuits}</span>
               </div>
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-slate-400 print:text-slate-500 block mb-1">Enfants exempts</span>
-                <span className="font-extrabold text-green-400 print:text-green-700 text-sm">{result.nombreEnfantsExoneres} (Gratuit)</span>
+                <span className="text-[10px] uppercase tracking-widest text-slate-500 block mb-1">Enfants exempts</span>
+                <span className="font-extrabold text-green-600 text-sm">{result.nombreEnfantsExoneres} (Gratuit)</span>
               </div>
             </div>
 
             {result.prixParPersonneParNuit > 0 && (
-              <div className="bg-white/5 print:bg-slate-100 p-4 border border-white/10 print:border-black/20 text-xs">
-                <span className="text-slate-400 print:text-slate-600 block uppercase tracking-wider text-[9px] mb-1">Loyer HT / voyageur / nuit :</span>
-                <span className="font-mono text-white print:text-black text-sm font-bold">{result.prixParPersonneParNuit.toFixed(2)} €</span>
+              <div className="bg-slate-50 p-4 border border-black/10 text-xs">
+                <span className="text-slate-500 block uppercase tracking-wider text-[9px] mb-1">Loyer HT / voyageur / nuit :</span>
+                <span className="font-mono text-black text-sm font-bold">{result.prixParPersonneParNuit.toFixed(2)} €</span>
               </div>
             )}
 
-            {/* Quick Action Buttons (Hidden on Print) */}
-            <div className="grid grid-cols-2 gap-2 pt-4 border-t border-white/10 dark:border-white/10 print:hidden">
+            {/* Quick Action Buttons */}
+            <div className="grid grid-cols-2 gap-2 pt-4 border-t border-black/10 print:hidden">
               <button
+                id="btn-copy-result"
                 onClick={triggerCopy}
-                className="flex items-center justify-center gap-1.5 bg-neutral-900 hover:bg-neutral-800 text-white border border-white/10 py-2.5 px-3 text-xs uppercase tracking-wider font-extrabold cursor-pointer transition-all"
+                className="flex items-center justify-center gap-1.5 bg-black hover:bg-[#d1121d] text-white py-2.5 px-3 text-xs uppercase tracking-wider font-extrabold cursor-pointer transition-all"
               >
                 {copied ? <Check className="h-3.5 w-3.5 text-green-400" /> : <Copy className="h-3.5 w-3.5" />}
                 <span>{copied ? "Copié !" : "Copier"}</span>
               </button>
               
               <button
+                id="btn-share-result"
                 onClick={triggerShare}
-                className="flex items-center justify-center gap-1.5 bg-neutral-900 hover:bg-neutral-800 text-white border border-white/10 py-2.5 px-3 text-xs uppercase tracking-wider font-extrabold cursor-pointer transition-all"
+                className="flex items-center justify-center gap-1.5 bg-black hover:bg-[#d1121d] text-white py-2.5 px-3 text-xs uppercase tracking-wider font-extrabold cursor-pointer transition-all"
               >
                 {shared ? <Check className="h-3.5 w-3.5 text-green-400" /> : <Share2 className="h-3.5 w-3.5" />}
                 <span>{shared ? "Partagé !" : "Partager"}</span>
               </button>
 
               <button
+                id="btn-pdf-result"
                 onClick={triggerExportPDF}
-                className="col-span-1 flex items-center justify-center gap-1.5 bg-neutral-900 hover:bg-neutral-800 text-white border border-white/10 py-2.5 px-3 text-xs uppercase tracking-wider font-extrabold cursor-pointer transition-all"
+                className="col-span-1 flex items-center justify-center gap-1.5 bg-black hover:bg-[#d1121d] text-white py-2.5 px-3 text-xs uppercase tracking-wider font-extrabold cursor-pointer transition-all"
               >
                 <Download className="h-3.5 w-3.5 text-[#d1121d]" />
                 <span>PDF</span>
               </button>
 
               <button
+                id="btn-print-result"
                 onClick={triggerPrint}
-                className="col-span-1 flex items-center justify-center gap-1.5 bg-neutral-900 hover:bg-neutral-800 text-white border border-white/10 py-2.5 px-3 text-xs uppercase tracking-wider font-extrabold cursor-pointer transition-all"
+                className="col-span-1 flex items-center justify-center gap-1.5 bg-black hover:bg-[#d1121d] text-white py-2.5 px-3 text-xs uppercase tracking-wider font-extrabold cursor-pointer transition-all"
               >
                 <Printer className="h-3.5 w-3.5" />
                 <span>Imprimer</span>
@@ -988,8 +992,8 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
           </div>
 
           {/* Formulation steps */}
-          <div className="border border-black/10 dark:border-white/10 p-6 space-y-6 bg-white dark:bg-[#151515] transition-colors print:border-black print:p-6 print:text-black">
-            <h3 className="text-xs font-black text-black dark:text-white print:text-black uppercase tracking-wider border-b border-black dark:border-white pb-3">
+          <div className="border border-black p-6 space-y-6 bg-white transition-colors print:border-black print:p-6 print:text-black">
+            <h3 className="text-xs font-black text-black uppercase tracking-wider border-b border-black pb-3">
               Formulation Étape par Étape
             </h3>
 
@@ -997,17 +1001,17 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
               {result.steps.map((step, idx) => (
                 <div key={idx} className="flex gap-4 text-sm">
                   <div className="flex flex-col items-center">
-                    <div className="h-6 w-6 rounded-none bg-black text-white dark:bg-white dark:text-black print:bg-black print:text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                    <div className="h-6 w-6 rounded-none bg-black text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
                       {idx + 1}
                     </div>
                     {idx < result.steps.length - 1 && (
-                      <div className="w-[1px] bg-black/10 dark:bg-white/10 print:bg-black/10 grow my-2" />
+                      <div className="w-[1px] bg-black/15 print:bg-black/10 grow my-2" />
                     )}
                   </div>
                   <div className="space-y-1 grow">
-                    <h4 className="font-bold text-black dark:text-white print:text-black text-xs uppercase tracking-wider">{step.label}</h4>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono leading-relaxed">{step.formula}</p>
-                    <p className="text-xs font-black text-black dark:text-[#d1121d] print:text-black flex items-center gap-1">
+                    <h4 className="font-bold text-black text-xs uppercase tracking-wider">{step.label}</h4>
+                    <p className="text-[11px] text-slate-500 font-mono leading-relaxed">{step.formula}</p>
+                    <p className="text-xs font-black text-[#d1121d] flex items-center gap-1">
                       <CornerDownRight className="h-3.5 w-3.5 text-[#d1121d] print:text-black shrink-0" />
                       <span>{step.result}</span>
                     </p>
@@ -1016,8 +1020,8 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
               ))}
             </div>
 
-            <div className="bg-[#fcfcfc] dark:bg-neutral-900/40 border-l-2 border-[#d1121d] p-4 text-xs text-slate-500 dark:text-slate-400 space-y-2 print:border-black print:bg-slate-50">
-              <div className="flex gap-1.5 text-[#d1121d] dark:text-[#d1121d] print:text-black font-bold uppercase tracking-wider text-[10px]">
+            <div className="bg-[#fcfcfc] border-l-2 border-[#d1121d] p-4 text-xs text-slate-500 space-y-2 print:border-black print:bg-slate-50">
+              <div className="flex gap-1.5 text-[#d1121d] font-bold uppercase tracking-wider text-[10px]">
                 <AlertTriangle className="h-4 w-4 shrink-0" />
                 <span>Notice d'usage légal</span>
               </div>

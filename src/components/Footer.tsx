@@ -1,4 +1,6 @@
-import { Calculator, ExternalLink, Heart } from "lucide-react";
+import React from "react";
+import { Calculator, ExternalLink, Heart, Cookie, Shield, Info, Twitter, Linkedin, Facebook } from "lucide-react";
+import { useCookieConsent } from "../hooks/useCookieConsent";
 
 interface FooterProps {
   navigate: (path: string) => void;
@@ -6,16 +8,34 @@ interface FooterProps {
 
 export default function Footer({ navigate }: FooterProps) {
   const currentYear = new Date().getFullYear();
+  const siteVersion = (import.meta as any).env.VITE_SITE_VERSION || "1.0.0";
+  const { openPreferences } = useCookieConsent();
+
+  const twitterUrl = (import.meta as any).env.VITE_TWITTER_URL || "";
+  const linkedinUrl = (import.meta as any).env.VITE_LINKEDIN_URL || "";
+  const facebookUrl = (import.meta as any).env.VITE_FACEBOOK_URL || "";
+
+  const handleFaqClick = () => {
+    navigate("/");
+    setTimeout(() => {
+      const el = document.getElementById("faq-section");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 150);
+  };
 
   return (
-    <footer className="bg-[#fbfbfb] dark:bg-[#121212] border-t border-black/10 dark:border-white/10 mt-auto transition-colors duration-200">
+    <footer className="bg-white border-t-2 border-black mt-auto transition-colors duration-200" id="app-footer">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
-          {/* Brand Info (Col span 5) */}
-          <div className="md:col-span-5 space-y-4">
+          
+          {/* Brand Info (Col span 4) */}
+          <div className="md:col-span-4 space-y-4" id="footer-col-brand">
             <button
               onClick={() => navigate("/")}
-              className="flex items-center gap-2 text-xl font-black text-black dark:text-white tracking-tighter hover:opacity-90 cursor-pointer uppercase"
+              className="flex items-center gap-2 text-xl font-black text-black tracking-tighter hover:opacity-90 cursor-pointer uppercase"
+              id="footer-brand-logo"
             >
               <div className="bg-[#d1121d] text-white p-2 flex items-center justify-center">
                 <Calculator className="h-5 w-5" />
@@ -24,99 +44,192 @@ export default function Footer({ navigate }: FooterProps) {
                 SEJOUR<span className="text-[#d1121d]">TAXE</span>
               </span>
             </button>
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm">
-              Outil de calcul gratuit, simple et rapide de la taxe de séjour en France pour tous types d'hébergements touristiques. Conforme aux taux officiels 2026.
+            <p className="text-xs font-medium text-slate-500 leading-relaxed max-w-sm">
+              Outil indépendant et gratuit de calcul de la taxe de séjour en France pour tous types d'hébergements (gîtes, meublés de tourisme, hôtels, campings). Conforme aux barèmes officiels de l'État en vigueur en 2026.
             </p>
+            {(twitterUrl || linkedinUrl || facebookUrl) && (
+              <div className="flex items-center gap-3 pt-2" id="footer-social-links">
+                {twitterUrl && (
+                  <a 
+                    href={twitterUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-slate-400 hover:text-[#d1121d] transition-colors"
+                    aria-label="Twitter / X"
+                    id="social-twitter"
+                  >
+                    <Twitter className="h-4 w-4" />
+                  </a>
+                )}
+                {linkedinUrl && (
+                  <a 
+                    href={linkedinUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-slate-400 hover:text-[#d1121d] transition-colors"
+                    aria-label="LinkedIn"
+                    id="social-linkedin"
+                  >
+                    <Linkedin className="h-4 w-4" />
+                  </a>
+                )}
+                {facebookUrl && (
+                  <a 
+                    href={facebookUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-slate-400 hover:text-[#d1121d] transition-colors"
+                    aria-label="Facebook"
+                    id="social-facebook"
+                  >
+                    <Facebook className="h-4 w-4" />
+                  </a>
+                )}
+              </div>
+            )}
           </div>
 
-          {/* Quick Links (Col span 3) */}
-          <div className="md:col-span-3">
-            <h3 className="text-xs font-black text-black dark:text-white tracking-widest uppercase mb-4">
-              Navigation
-            </h3>
-            <ul className="space-y-3 text-xs">
-              <li>
-                <button 
-                  onClick={() => navigate("/")} 
-                  className="font-bold text-slate-500 dark:text-slate-400 hover:text-[#d1121d] dark:hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Accueil
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => navigate("/calculateur-taxe-de-sejour")} 
-                  className="font-bold text-slate-500 dark:text-slate-400 hover:text-[#d1121d] dark:hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Calculateur de taxe
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => navigate("/comment-calculer-la-taxe-de-sejour")} 
-                  className="font-bold text-slate-500 dark:text-slate-400 hover:text-[#d1121d] dark:hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Guide d'explication
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => navigate("/contact")} 
-                  className="font-bold text-slate-500 dark:text-slate-400 hover:text-[#d1121d] dark:hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Contact
-                </button>
-              </li>
-            </ul>
+          {/* Quick Links (Col span 4) */}
+          <div className="md:col-span-4 grid grid-cols-2 gap-4" id="footer-col-nav">
+            <div>
+              <h3 className="text-xs font-black text-black tracking-widest uppercase mb-4">
+                Navigation
+              </h3>
+              <ul className="space-y-3 text-xs font-bold">
+                <li>
+                  <button 
+                    onClick={() => navigate("/")} 
+                    className="text-slate-500 hover:text-[#d1121d] transition-colors cursor-pointer text-left"
+                    id="footer-nav-home"
+                  >
+                    Accueil
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => navigate("/calculateur-taxe-de-sejour")} 
+                    className="text-slate-500 hover:text-[#d1121d] transition-colors cursor-pointer text-left"
+                    id="footer-nav-calc"
+                  >
+                    Calculateur
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={handleFaqClick} 
+                    className="text-slate-500 hover:text-[#d1121d] transition-colors cursor-pointer text-left"
+                    id="footer-nav-faq"
+                  >
+                    FAQ
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => navigate("/contact")} 
+                    className="text-slate-500 hover:text-[#d1121d] transition-colors cursor-pointer text-left"
+                    id="footer-nav-contact"
+                  >
+                    Contact
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-xs font-black text-black tracking-widest uppercase mb-4">
+                Légal & RGPD
+              </h3>
+              <ul className="space-y-3 text-xs font-bold">
+                <li>
+                  <button 
+                    onClick={() => navigate("/politique-de-confidentialite")} 
+                    className="text-slate-500 hover:text-[#d1121d] transition-colors cursor-pointer text-left"
+                    id="footer-nav-privacy"
+                  >
+                    Confidentialité
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => navigate("/politique-des-cookies")} 
+                    className="text-slate-500 hover:text-[#d1121d] transition-colors cursor-pointer text-left"
+                    id="footer-nav-cookies"
+                  >
+                    Cookies (RGPD)
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => navigate("/mentions-legales")} 
+                    className="text-slate-500 hover:text-[#d1121d] transition-colors cursor-pointer text-left"
+                    id="footer-nav-legal"
+                  >
+                    Mentions légales
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => navigate("/plan-du-site")} 
+                    className="text-slate-500 hover:text-[#d1121d] transition-colors cursor-pointer text-left"
+                    id="footer-nav-sitemap"
+                  >
+                    Plan du site
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
 
-          {/* Legal Links (Col span 4) */}
-          <div className="md:col-span-4">
-            <h3 className="text-xs font-black text-black dark:text-white tracking-widest uppercase mb-4">
-              Informations légales
+          {/* Cookie Preferences Column (Col span 4) */}
+          <div className="md:col-span-4 space-y-4" id="footer-col-preference">
+            <h3 className="text-xs font-black text-black tracking-widest uppercase">
+              Vos choix de traceurs
             </h3>
-            <ul className="space-y-3 text-xs">
-              <li>
-                <button 
-                  onClick={() => navigate("/politique-de-confidentialite")} 
-                  className="font-bold text-slate-500 dark:text-slate-400 hover:text-[#d1121d] dark:hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Politique de confidentialité
-                </button>
-              </li>
-              <li>
-                <button 
-                  onClick={() => navigate("/mentions-legales")} 
-                  className="font-bold text-slate-500 dark:text-slate-400 hover:text-[#d1121d] dark:hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Mentions légales
-                </button>
-              </li>
-              <li>
-                <a
-                  href="https://reseaulocal.impots.gouv.fr/vdf-taxe-sejour/recherche"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 font-bold text-[#d1121d] hover:underline transition-colors"
-                >
-                  <span>Tarifs officiels de l'État</span>
-                  <ExternalLink className="h-3.5 w-3.5" />
-                </a>
-              </li>
-            </ul>
+            <p className="text-xs text-slate-500 leading-relaxed font-medium">
+              Conformément à la réglementation RGPD, vous disposez d'un droit complet de contrôle et de modification des traceurs que nous utilisons pour le bon fonctionnement et le financement du site.
+            </p>
+            <div>
+              <button
+                onClick={openPreferences}
+                className="inline-flex items-center gap-2 bg-slate-100 hover:bg-[#d1121d] hover:text-white text-black border border-black/15 py-2.5 px-4 text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer"
+                id="btn-footer-cookie-preferences"
+              >
+                <Cookie className="h-4 w-4" />
+                <span>Gérer mes cookies</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Disclaimer Warning (Notice styled exactly like other legal panels) */}
-        <div className="mt-10 pt-8 border-t border-black/5 dark:border-white/5">
-          <div className="max-w-3xl mx-auto border-l-2 border-[#d1121d] bg-[#fcfcfc] dark:bg-neutral-900/40 p-5 text-xs text-slate-500 dark:text-slate-400 italic leading-relaxed text-center">
-            Avertissement : Ce calculateur fournit une estimation indicative. Le montant officiel dépend des tarifs votés par la commune ou l’EPCI compétent. Bien que nous nous efforcions d'appliquer les règles en vigueur de l'administration fiscale française, vérifiez toujours les tarifs officiels publiés par votre collectivité locale ou sur la plateforme officielle du gouvernement.
+        {/* Official Rates External Link (Notice styled precisely) */}
+        <div className="mt-10 pt-8 border-t border-black/10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50 p-5" id="footer-official-banner">
+          <div className="flex items-start gap-3">
+            <div className="bg-[#d1121d] text-white p-1 shrink-0">
+              <Info className="h-4 w-4" />
+            </div>
+            <p className="text-[11px] text-slate-500 leading-relaxed max-w-2xl font-medium">
+              Avertissement : Ce simulateur fournit des estimations indicatives. Bien que nous appliquions rigoureusement les barèmes légaux, vérifiez toujours les tarifs officiels applicables dans votre commune directement sur le portail de l'État français.
+            </p>
           </div>
+          <a
+            href="https://taxesejour.impots.gouv.fr/FR/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 inline-flex items-center gap-1.5 font-bold text-xs bg-black hover:bg-[#d1121d] text-white py-2.5 px-4 border border-transparent transition-colors uppercase tracking-wider"
+            id="link-official-government-rates"
+          >
+            <span>Tarifs officiels de l'État</span>
+            <ExternalLink className="h-3.5 w-3.5" />
+          </a>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-10 pt-6 border-t border-black/10 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] font-mono uppercase tracking-wider text-slate-400">
-          <p>© {currentYear} SejourTaxe.com - Tous droits réservés.</p>
+        <div className="mt-10 pt-6 border-t border-black/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] font-mono uppercase tracking-wider text-slate-400">
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4" id="footer-credits">
+            <p>© {currentYear} SejourTaxe.com - Tous droits réservés.</p>
+            <span className="hidden sm:inline text-slate-300">|</span>
+            <p className="font-bold text-slate-500">Version {siteVersion}</p>
+          </div>
           <p className="flex items-center gap-1.5 font-bold">
             <span>Développé avec professionnalisme pour les hébergeurs français</span>
             <Heart className="h-3 w-3 text-[#d1121d] fill-[#d1121d]" />
@@ -126,4 +239,3 @@ export default function Footer({ navigate }: FooterProps) {
     </footer>
   );
 }
-

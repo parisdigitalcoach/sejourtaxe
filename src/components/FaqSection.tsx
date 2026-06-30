@@ -43,7 +43,7 @@ export default function FaqSection() {
   ];
 
   return (
-    <section className="bg-transparent py-10">
+    <section className="bg-transparent py-10" id="faq-section">
       <div className="flex items-center gap-3 mb-8 border-b border-black pb-4">
         <HelpCircle className="h-5 w-5 text-black" />
         <h2 className="text-xl font-black text-black tracking-tight uppercase">Questions Fréquentes</h2>

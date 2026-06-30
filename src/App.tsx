@@ -7,8 +7,15 @@ import GuideView from "./components/GuideView";
 import PrivacyView from "./components/PrivacyView";
 import LegalView from "./components/LegalView";
 import ContactView from "./components/ContactView";
-import { initIntegrations, trackPageView } from "./lib/integrations";
+import CookiesPolicyView from "./components/CookiesPolicyView";
+import SitemapView from "./components/SitemapView";
+import { trackPageView } from "./lib/integrations";
 import { updateSEO } from "./lib/seo";
+
+// GDPR Consent Provider & Components
+import { CookieConsentProvider } from "./context/CookieConsentContext";
+import CookieConsent from "./components/CookieConsent";
+import CookiePreferencesModal from "./components/CookiePreferencesModal";
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState<string>("/");
@@ -24,11 +31,6 @@ export default function App() {
 
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
-  }, []);
-
-  // Initialize analytics, tag manager, adsense, GSC
-  useEffect(() => {
-    initIntegrations();
   }, []);
 
   // Handle path transitions (tracking, SEO)
@@ -67,6 +69,10 @@ export default function App() {
         return <GuideView navigate={navigate} />;
       case "/politique-de-confidentialite":
         return <PrivacyView />;
+      case "/politique-des-cookies":
+        return <CookiesPolicyView />;
+      case "/plan-du-site":
+        return <SitemapView navigate={navigate} />;
       case "/mentions-legales":
         return <LegalView />;
       case "/contact":
@@ -77,21 +83,29 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] flex flex-col font-sans text-black selection:bg-[#d1121d]/10 selection:text-[#d1121d] transition-colors duration-200">
-      {/* Dynamic GTM noscript is handled in integrations.ts */}
-      
-      {/* Header with Nav */}
-      <Header currentPath={currentPath} navigate={navigate} />
+    <CookieConsentProvider>
+      <div className="min-h-screen bg-[#fafafa] flex flex-col font-sans text-black selection:bg-[#d1121d]/10 selection:text-[#d1121d] transition-colors duration-200">
+        {/* Dynamic GTM noscript is handled in integrations.ts */}
+        
+        {/* Header with Nav */}
+        <Header currentPath={currentPath} navigate={navigate} />
 
-      {/* Main Layout Stage */}
-      <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="animate-fade-in">
-          {renderView()}
-        </div>
-      </main>
+        {/* Main Layout Stage */}
+        <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+          <div className="animate-fade-in">
+            {renderView()}
+          </div>
+        </main>
 
-      {/* Footer Block */}
-      <Footer navigate={navigate} />
-    </div>
+        {/* Footer Block */}
+        <Footer navigate={navigate} />
+
+        {/* Cookie Consent Banner */}
+        <CookieConsent navigate={navigate} />
+
+        {/* Cookie Preferences Modal */}
+        <CookiePreferencesModal />
+      </div>
+    </CookieConsentProvider>
   );
 }
