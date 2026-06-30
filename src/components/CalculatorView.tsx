@@ -9,6 +9,7 @@ import { calculateTax } from "../lib/taxEngine";
 import { TaxConfig, TaxInput, ModeCalcul } from "../types";
 import AdBanner from "./AdBanner";
 import { jsPDF } from "jspdf";
+import { useLanguage } from "../context/LanguageContext";
 
 // Type for searched communes in the compact list
 interface CompactCommune {
@@ -21,6 +22,32 @@ interface CompactCommune {
 }
 
 export default function CalculatorView() {
+  const { t, language } = useLanguage();
+
+  const getHebergementTypeLabel = (type: string) => {
+    switch (type) {
+      case "Meublé de tourisme": return t("type_meuble");
+      case "Hôtel": return t("type_hotel");
+      case "Chambre d'hôtes": return t("type_chambre");
+      case "Camping": return t("type_camping");
+      case "Résidence de tourisme": return t("type_residence");
+      default: return type;
+    }
+  };
+
+  const getClassementLabel = (rating: string) => {
+    switch (rating) {
+      case "Non classé": return t("rating_non_classe");
+      case "1 étoile": return t("rating_1_star");
+      case "2 étoiles": return t("rating_2_stars");
+      case "3 étoiles": return t("rating_3_stars");
+      case "4 étoiles": return t("rating_4_stars");
+      case "5 étoiles": return t("rating_5_stars");
+      case "Palace / Exceptionnel": return t("rating_palace");
+      default: return rating;
+    }
+  };
+
   // Autocomplete & Commune states
   const [communesList, setCommunesList] = useState<CompactCommune[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("Paris (75)");
@@ -335,7 +362,7 @@ export default function CalculatorView() {
     nombreNuits
   };
 
-  const result = calculateTax(currentConfig, currentInput);
+  const result = calculateTax(currentConfig, currentInput, language);
 
   // Keyboard navigation inside autocomplete suggestion list
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -392,8 +419,9 @@ export default function CalculatorView() {
     doc.setFont("Helvetica", "normal");
     doc.setFontSize(9);
     doc.setTextColor(100, 100, 100);
-    doc.text("RAPPORT D'ESTIMATION OFFICIEL — TAXE DE SÉJOUR", 20, 31);
-    doc.text(`Document généré le : ${new Date().toLocaleDateString("fr-FR")}`, 20, 36);
+    doc.text(t("pdf_official_report"), 20, 31);
+    const dateLocale = language === "zh" ? "zh-CN" : language === "en" ? "en-US" : language === "de" ? "de-DE" : language === "es" ? "es-ES" : language === "it" ? "it-IT" : "fr-FR";
+    doc.text(`${t("pdf_generated_on")} ${new Date().toLocaleDateString(dateLocale)}`, 20, 36);
 
     // Swiss accent line
     doc.setLineWidth(1);
@@ -404,38 +432,38 @@ export default function CalculatorView() {
     doc.setFont("Helvetica", "bold");
     doc.setFontSize(11);
     doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-    doc.text("PARAMÈTRES DU SÉJOUR", 20, 52);
+    doc.text(t("pdf_stay_parameters"), 20, 52);
 
     doc.setFont("Helvetica", "bold");
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
     
     // Left Grid
-    doc.text("Commune :", 20, 62);
-    doc.text("Département :", 20, 68);
-    doc.text("Région :", 20, 74);
-    doc.text("Type d'établissement :", 20, 80);
-    doc.text("Classement :", 20, 86);
+    doc.text(t("pdf_commune"), 20, 62);
+    doc.text(t("pdf_dept"), 20, 68);
+    doc.text(t("pdf_region"), 20, 74);
+    doc.text(t("pdf_type"), 20, 80);
+    doc.text(t("pdf_rating"), 20, 86);
 
     doc.setFont("Helvetica", "normal");
     doc.text(selectedCommuneName, 65, 62);
     doc.text(departement, 65, 68);
     doc.text(region, 65, 74);
-    doc.text(hebergementType, 65, 80);
-    doc.text(classement, 65, 86);
+    doc.text(getHebergementTypeLabel(hebergementType), 65, 80);
+    doc.text(getClassementLabel(classement), 65, 86);
 
     // Right Grid
     doc.setFont("Helvetica", "bold");
-    doc.text("Voyageurs Adultes :", 120, 62);
-    doc.text("Voyageurs Enfants :", 120, 68);
-    doc.text("Nuits de séjour :", 120, 74);
-    doc.text("Loyer total HT :", 120, 80);
+    doc.text(t("pdf_adults"), 120, 62);
+    doc.text(t("pdf_children"), 120, 68);
+    doc.text(t("pdf_nights"), 120, 74);
+    doc.text(t("pdf_rent_ht"), 120, 80);
 
     doc.setFont("Helvetica", "normal");
     doc.text(String(nombreAdultes), 165, 62);
-    doc.text(`${nombreEnfants} (Exonérés)`, 165, 68);
+    doc.text(`${nombreEnfants} (${t("pdf_exempt")})`, 165, 68);
     doc.text(String(nombreNuits), 165, 74);
-    doc.text(modeCalcul === "pourcentage" ? `${prixTotalHT.toFixed(2)} €` : "Non applicable", 165, 80);
+    doc.text(modeCalcul === "pourcentage" ? `${prixTotalHT.toFixed(2)} €` : t("pdf_not_applicable"), 165, 80);
 
     // Result Highlight section
     doc.setFillColor(lightGray[0], lightGray[1], lightGray[2]);
@@ -444,7 +472,7 @@ export default function CalculatorView() {
     doc.setFont("Helvetica", "bold");
     doc.setFontSize(10);
     doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-    doc.text("ESTIMATION DE LA TAXE GLOBALE EXIGIBLE", 25, 102);
+    doc.text(t("pdf_estimation_title"), 25, 102);
 
     doc.setFont("Helvetica", "bold");
     doc.setFontSize(22);
@@ -454,13 +482,13 @@ export default function CalculatorView() {
     doc.setFont("Helvetica", "normal");
     doc.setFontSize(9);
     doc.setTextColor(100, 100, 100);
-    doc.text(`(soit ${result.taxeParAdulteParNuit.toFixed(3)} € par adulte par nuit)`, 115, 110);
+    doc.text(`(soit ${result.taxeParAdulteParNuit.toFixed(3)} € ${t("pdf_per_adult_night")})`, 115, 110);
 
     // Section 2: Calculation Breakdown
     doc.setFont("Helvetica", "bold");
     doc.setFontSize(11);
     doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-    doc.text("DÉTAIL DE LA FORMULATION LÉGALE", 20, 130);
+    doc.text(t("pdf_breakdown_title"), 20, 130);
 
     let y = 138;
     result.steps.forEach((step, index) => {
@@ -474,12 +502,12 @@ export default function CalculatorView() {
       doc.setFont("Helvetica", "bold");
       doc.setFontSize(9);
       doc.setTextColor(0, 0, 0);
-      doc.text(`Étape 0${index + 1} : ${step.label}`, 23, y + 5);
+      doc.text(`${t("pdf_step")} 0${index + 1} : ${step.label}`, 23, y + 5);
 
       doc.setFont("Helvetica", "normal");
       doc.setFontSize(8);
       doc.setTextColor(100, 100, 100);
-      doc.text(`Formule : ${step.formula}`, 23, y + 10);
+      doc.text(`${t("pdf_formula")} : ${step.formula}`, 23, y + 10);
 
       doc.setFont("Helvetica", "bold");
       doc.setFontSize(8.5);
@@ -497,27 +525,33 @@ export default function CalculatorView() {
     doc.setFont("Helvetica", "italic");
     doc.setFontSize(7);
     doc.setTextColor(120, 120, 120);
-    doc.text("Mentions Légales : Ce document constitue une simulation gratuite à titre purement indicatif. SejourTaxe n'est pas responsable", 20, 280);
-    doc.text("des décalages de taux locaux. Seuls les décrets officiels publiés par les communes ou leurs EPCI font foi.", 20, 284);
+    
+    const disclaimerText = t("pdf_legal_disclaimer");
+    if (disclaimerText.length > 120) {
+      doc.text(disclaimerText.substring(0, 120), 20, 280);
+      doc.text(disclaimerText.substring(120), 20, 284);
+    } else {
+      doc.text(disclaimerText, 20, 280);
+    }
 
     doc.save(`sejourtaxe_${selectedCommuneName.toLowerCase().replace(/\s+/g, "_")}.pdf`);
   };
 
   // Actions: Copy Result Text
   const triggerCopy = () => {
-    const text = `Estimation Taxe de Séjour (SejourTaxe)
+    const text = `${t("copy_title")}
 --------------------------------------
-Ville: ${selectedCommuneName} (${departement})
-Loyer total HT: ${modeCalcul === "pourcentage" ? `${prixTotalHT.toFixed(2)} €` : "Non applicable"}
-Voyageurs adultes: ${nombreAdultes}
-Voyageurs enfants (Moins 18 ans): ${nombreEnfants}
-Nuits de séjour: ${nombreNuits}
-Établissement: ${hebergementType} (${classement})
+${t("calc_print_city")}: ${selectedCommuneName} (${departement})
+${t("copy_rent_ht")}: ${modeCalcul === "pourcentage" ? `${prixTotalHT.toFixed(2)} €` : t("pdf_not_applicable")}
+${t("copy_adults")}: ${nombreAdultes}
+${t("copy_children")}: ${nombreEnfants}
+${t("copy_nights")}: ${nombreNuits}
+${t("copy_establishment")}: ${getHebergementTypeLabel(hebergementType)} (${getClassementLabel(classement)})
 --------------------------------------
-MONTANT TOTAL EXIGIBLE: ${result.taxeTotale.toFixed(2)} €
-Soit ${result.taxeParAdulteParNuit.toFixed(3)} € par adulte par nuit
+${t("copy_total_due")}: ${result.taxeTotale.toFixed(2)} €
+Soit ${result.taxeParAdulteParNuit.toFixed(3)} € ${t("pdf_per_adult_night")}
 --------------------------------------
-Simulation réalisée anonymement sur https://sejourtaxe.com`;
+${t("copy_site_footer")} https://sejourtaxe.com`;
 
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true);
@@ -527,12 +561,16 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
 
   // Actions: Share URL with state
   const triggerShare = () => {
-    const shareUrl = `${window.location.origin}/calculateur-taxe-de-sejour?ville=${encodeURIComponent(selectedCommuneName)}&postalCode=${encodeURIComponent(selectedPostalCode)}&adultes=${nombreAdultes}&enfants=${nombreEnfants}&nuits=${nombreNuits}&prix=${prixTotalHT}&hebergementType=${encodeURIComponent(hebergementType)}&classement=${encodeURIComponent(classement)}`;
+    const shareUrl = `${window.location.origin}/calculateur-taxe-de-sejour?ville=${encodeURIComponent(selectedCommuneName)}&postalCode=${encodeURIComponent(selectedPostalCode)}&adultes=${nombreAdultes}&enfants=${nombreEnfants}&nuits=${nombreNuits}&prix=${prixTotalHT}&hebergementType=${encodeURIComponent(hebergementType)}&classement=${encodeURIComponent(classement)}&lang=${language}`;
     
+    const desc = t("share_desc")
+      .replace("{total}", result.taxeTotale.toFixed(2))
+      .replace("{ville}", selectedCommuneName);
+
     if (navigator.share) {
       navigator.share({
-        title: "Simulation Taxe de Séjour | SejourTaxe",
-        text: `Découvrez mon estimation de taxe de séjour de ${result.taxeTotale.toFixed(2)} € pour un séjour à ${selectedCommuneName}.`,
+        title: t("share_text"),
+        text: desc,
         url: shareUrl
       }).catch(() => {
         // Fallback to clipboard if rejected
@@ -568,10 +606,20 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
       {/* Page Header (Hidden on print) */}
       <div className="py-8 border-b border-black/10 print:hidden transition-colors">
         <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-black uppercase leading-[0.9]">
-          Simulateur <span className="text-[#d1121d]">Intégral</span>
+          {t("calc_main_title").includes(" ") ? (
+            <>
+              {t("calc_main_title").split(" ").slice(0, -1).join(" ")}{" "}
+              <span className="text-[#d1121d]">{t("calc_main_title").split(" ").slice(-1).join(" ")}</span>
+            </>
+          ) : (
+            <>
+              {t("calc_main_title").substring(0, 4)}
+              <span className="text-[#d1121d]">{t("calc_main_title").substring(4)}</span>
+            </>
+          )}
         </h1>
         <p className="text-slate-600 text-sm sm:text-base mt-3 max-w-xl font-medium">
-          Renseignez les détails de votre hébergement et les paramètres de séjour pour calculer le montant de la taxe de séjour exigible en direct.
+          {t("calc_main_subtitle")}
         </p>
       </div>
 
@@ -585,14 +633,14 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
           <div className="flex items-center justify-between border-b border-black pb-4">
             <h2 className="text-base font-black text-black uppercase tracking-wider flex items-center gap-2">
               <Calculator className="h-4 w-4 text-[#d1121d]" />
-              <span>Paramètres du Séjour</span>
+              <span>{t("form_title")}</span>
             </h2>
             <button
               onClick={resetForm}
               className="text-xs text-slate-500 hover:text-[#d1121d] font-bold uppercase tracking-widest flex items-center gap-1 cursor-pointer transition-colors"
             >
               <RefreshCw className="h-3 w-3" />
-              <span>Réinitialiser</span>
+              <span>{t("form_reset")}</span>
             </button>
           </div>
 
@@ -602,7 +650,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
             <div className="sm:col-span-2 relative" ref={autocompleteRef}>
               <label className="block text-xs font-bold uppercase tracking-wider text-black mb-2 flex items-center gap-1.5">
                 <MapPin className="h-3.5 w-3.5 text-[#d1121d]" />
-                <span>Commune ou Code Postal</span>
+                <span>{t("field_commune")}</span>
               </label>
               
               <div className="relative">
@@ -618,7 +666,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                     setIsSuggestionsOpen(true);
                   }}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ex: Paris, Strasbourg, Nice..."
+                  placeholder={t("field_commune_placeholder")}
                   className="w-full bg-[#fcfcfc] border border-black/30 rounded-none px-4 py-3 pl-10 text-sm text-black focus:outline-none focus:border-[#d1121d] transition-all font-bold"
                 />
                 <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
@@ -631,7 +679,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
               {isSuggestionsOpen && (searchQuery.trim() !== "" || communesList.length > 0) && (
                 <div className="absolute z-50 w-full mt-1 bg-white border border-black shadow-xl max-h-60 overflow-y-auto rounded-none transition-all">
                   {isLoadingCommunes ? (
-                    <div className="p-4 text-xs font-bold text-slate-400 text-center uppercase tracking-wider">Chargement des 35 000 communes...</div>
+                    <div className="p-4 text-xs font-bold text-slate-400 text-center uppercase tracking-wider">{t("calc_loading_communes")}</div>
                   ) : filteredSuggestions.length > 0 ? (
                     filteredSuggestions.map((suggestion, index) => (
                       <button
@@ -650,11 +698,11 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                       </button>
                     ))
                   ) : searchQuery.trim() !== "" ? (
-                    <div className="p-4 text-xs font-bold text-slate-400 text-center uppercase tracking-wider">Aucune commune trouvée</div>
+                    <div className="p-4 text-xs font-bold text-slate-400 text-center uppercase tracking-wider">{t("calc_no_commune")}</div>
                   ) : (
                     // Default recommendations if search is empty but focused
                     <div className="p-2 space-y-1">
-                      <div className="p-2 text-[10px] uppercase tracking-wider text-slate-400 font-bold border-b border-black/5">Destinations Populaires</div>
+                      <div className="p-2 text-[10px] uppercase tracking-wider text-slate-400 font-bold border-b border-black/5">{t("calc_popular_destinations")}</div>
                       {Object.keys(COMMUNE_PRESETS).map((key) => (
                         <button
                           key={key}
@@ -680,45 +728,45 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
             {/* Type d'hébergement */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-black mb-2">
-                Type d'établissement
+                {t("field_type")}
               </label>
               <select
                 value={hebergementType}
                 onChange={(e) => setHebergementType(e.target.value)}
                 className="w-full bg-[#fcfcfc] border border-black/30 rounded-none px-4 py-3 text-sm text-black focus:outline-none focus:border-[#d1121d] transition-all font-bold"
               >
-                <option value="Meublé de tourisme">Meublé de tourisme</option>
-                <option value="Hôtel">Hôtel</option>
-                <option value="Chambre d'hôtes">Chambre d'hôtes</option>
-                <option value="Camping">Camping</option>
-                <option value="Résidence de tourisme">Résidence de tourisme</option>
+                <option value="Meublé de tourisme">{t("type_meuble")}</option>
+                <option value="Hôtel">{t("type_hotel")}</option>
+                <option value="Chambre d'hôtes">{t("type_chambre")}</option>
+                <option value="Camping">{t("type_camping")}</option>
+                <option value="Résidence de tourisme">{t("type_residence")}</option>
               </select>
             </div>
 
             {/* Classement */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-black mb-2">
-                Classement officiel
+                {t("field_rating")}
               </label>
               <select
                 value={classement}
                 onChange={(e) => setClassement(e.target.value)}
                 className="w-full bg-[#fcfcfc] border border-black/30 rounded-none px-4 py-3 text-sm focus:outline-none focus:border-[#d1121d] transition-all font-black text-[#d1121d]"
               >
-                <option value="Non classé">Non classé (Proportionnel)</option>
-                <option value="1 étoile">1 étoile</option>
-                <option value="2 étoiles">2 étoiles</option>
-                <option value="3 étoiles">3 étoiles</option>
-                <option value="4 étoiles">4 étoiles</option>
-                <option value="5 étoiles">5 étoiles</option>
-                <option value="Palace / Exceptionnel">Palace / Exceptionnel</option>
+                <option value="Non classé">{t("rating_non_classe")}</option>
+                <option value="1 étoile">{t("rating_1_star")}</option>
+                <option value="2 étoiles">{t("rating_2_stars")}</option>
+                <option value="3 étoiles">{t("rating_3_stars")}</option>
+                <option value="4 étoiles">{t("rating_4_stars")}</option>
+                <option value="5 étoiles">{t("rating_5_stars")}</option>
+                <option value="Palace / Exceptionnel">{t("rating_palace")}</option>
               </select>
             </div>
           </div>
 
           {/* Occupants card */}
           <div className="bg-white p-6 space-y-6 border border-black/30">
-            <h3 className="text-xs font-black text-black uppercase tracking-widest border-b border-black/10 pb-2">Hébergement & Occupants</h3>
+            <h3 className="text-xs font-black text-black uppercase tracking-widest border-b border-black/10 pb-2">{t("card_occupants_title")}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               
               {/* Prix Total HT */}
@@ -726,7 +774,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-bold uppercase tracking-wider text-black mb-2 flex items-center gap-1">
                     <Euro className="h-4 w-4 text-[#d1121d]" />
-                    <span>Loyer total HT (€)</span>
+                    <span>{t("field_rent_ht")}</span>
                   </label>
                   <input
                     type="number"
@@ -737,7 +785,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                     className="w-full bg-white border border-black/30 rounded-none px-4 py-3 text-sm text-black font-extrabold focus:outline-none focus:border-[#d1121d] transition-all"
                   />
                   <p className="text-[11px] text-slate-500 mt-2 font-medium">
-                    Nécessaire pour le calcul proportionnel de taxe meublés non classés de la commune.
+                    {t("field_rent_ht_desc")}
                   </p>
                 </div>
               )}
@@ -746,7 +794,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-black mb-2 flex items-center gap-1">
                   <Users className="h-4 w-4 text-slate-500" />
-                  <span>Adultes (18 ans et plus)</span>
+                  <span>{t("field_adults")}</span>
                 </label>
                 <input
                   type="number"
@@ -761,7 +809,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-black mb-2 flex items-center gap-1">
                   <Users className="h-4 w-4 text-slate-400" />
-                  <span>Enfants (Moins de 18 ans)</span>
+                  <span>{t("field_children")}</span>
                 </label>
                 <input
                   type="number"
@@ -776,7 +824,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
               <div className="sm:col-span-2">
                 <label className="block text-xs font-bold uppercase tracking-wider text-black mb-2 flex items-center gap-1">
                   <Moon className="h-4 w-4 text-slate-500" />
-                  <span>Nombre de nuits du séjour</span>
+                  <span>{t("field_nights")}</span>
                 </label>
                 <input
                   type="number"
@@ -793,7 +841,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
           <div className="border-t border-black/10 pt-6 space-y-6">
             <h3 className="text-xs font-black text-black uppercase tracking-widest flex items-center gap-1.5">
               <Info className="h-4 w-4 text-[#d1121d]" />
-              <span>Détail des barèmes fiscaux applicables</span>
+              <span>{t("card_tax_details_title")}</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -801,7 +849,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
               {modeCalcul === "fixe" ? (
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">
-                    Taux fixe (€ / nuit)
+                    {t("field_fixed_rate_label")}
                   </label>
                   <input
                     type="number"
@@ -817,7 +865,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                   <div>
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5 flex items-center gap-0.5">
                       <Percent className="h-3 w-3 text-slate-400" />
-                      <span>Taux pourcentage</span>
+                      <span>{t("field_pct_rate_label")}</span>
                     </label>
                     <input
                       type="number"
@@ -830,7 +878,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                   </div>
                   <div>
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">
-                      Plafond légal (€)
+                      {t("field_ceiling_label")}
                     </label>
                     <input
                       type="number"
@@ -847,7 +895,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
               {/* Taxe additionnelle Départementale */}
               <div>
                 <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">
-                  Taxe dép. (CD)
+                  {t("field_dep_tax_label")}
                 </label>
                 <div className="flex items-center bg-[#fbfbfb] border border-black/20 rounded-none px-2.5">
                   <input
@@ -864,7 +912,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
               {/* Taxe additionnelle Régionale */}
               <div>
                 <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">
-                  Taxe rég.
+                  {t("field_reg_tax_label")}
                 </label>
                 <div className="flex items-center bg-[#fbfbfb] border border-black/20 rounded-none px-2.5">
                   <input
@@ -881,7 +929,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
               {/* Taxe additionnelle Transport */}
               <div>
                 <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5">
-                  Taxe transport
+                  {t("field_trans_tax_label")}
                 </label>
                 <div className="flex items-center bg-[#fbfbfb] border border-black/20 rounded-none px-2.5">
                   <input
@@ -897,7 +945,15 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
             </div>
 
             <p className="text-[10px] text-slate-500 italic">
-              * Les taux réglementaires locaux ont été automatiquement pré-remplis pour la commune de <strong className="text-[#d1121d]">{selectedCommuneName}</strong>. Vous pouvez modifier manuellement ces pourcentages à votre convenance.
+              {t("calc_manual_override_notice").includes("{city}") ? (
+                <>
+                  {t("calc_manual_override_notice").split("{city}")[0]}
+                  <strong className="text-[#d1121d]">{selectedCommuneName}</strong>
+                  {t("calc_manual_override_notice").split("{city}")[1]}
+                </>
+              ) : (
+                t("calc_manual_override_notice")
+              )}
             </p>
           </div>
         </div>
@@ -909,11 +965,11 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
           <div className="bg-white text-black border border-black p-6 sm:p-8 space-y-6 transition-colors" id="calc-result-card">
             <span className="text-[10px] uppercase tracking-widest font-black text-[#d1121d] flex items-center gap-1.5">
               <ShieldCheck className="h-4 w-4" />
-              <span>Rapport d'estimation</span>
+              <span>{t("calc_estimation_report")}</span>
             </span>
 
             <div>
-              <p className="text-xs uppercase tracking-wider text-slate-500 font-bold">Estimation Taxe Totale</p>
+              <p className="text-xs uppercase tracking-wider text-slate-500 font-bold">{t("calc_total_estimation_label")}</p>
               <h3 className="text-5xl font-black tracking-tight mt-2 text-black">
                 {result.taxeTotale.toFixed(2)} <span className="text-[#d1121d] font-bold">€</span>
               </h3>
@@ -921,32 +977,34 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
 
             {/* Print metadata header */}
             <div className="hidden print:block border-b border-black/25 pb-4 space-y-1">
-              <p className="text-xs"><strong>Document d'estimation de la taxe de séjour (2026)</strong></p>
-              <p className="text-[10px] text-slate-500">Ville: {selectedCommuneName} | Catégorie: {hebergementType} ({classement})</p>
+              <p className="text-xs"><strong>{t("calc_print_doc_title")}</strong></p>
+              <p className="text-[10px] text-slate-500">
+                {t("calc_print_city")}: {selectedCommuneName} | {t("calc_print_category")}: {getHebergementTypeLabel(hebergementType)} ({getClassementLabel(classement)})
+              </p>
             </div>
 
             <div className="border-t border-black/10 pt-6 grid grid-cols-2 gap-y-6 gap-x-4 text-xs">
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-slate-500 block mb-1">Par adulte / nuit</span>
+                <span className="text-[10px] uppercase tracking-widest text-slate-500 block mb-1">{t("calc_per_adult_night_label")}</span>
                 <span className="font-extrabold text-black text-sm">{result.taxeParAdulteParNuit.toFixed(3)} €</span>
               </div>
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-slate-500 block mb-1">Adultes taxés</span>
+                <span className="text-[10px] uppercase tracking-widest text-slate-500 block mb-1">{t("calc_taxed_adults")}</span>
                 <span className="font-extrabold text-black text-sm">{result.nombreAdultesTaxables}</span>
               </div>
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-slate-500 block mb-1">Nuits du séjour</span>
+                <span className="text-[10px] uppercase tracking-widest text-slate-500 block mb-1">{t("calc_stay_nights")}</span>
                 <span className="font-extrabold text-black text-sm">{result.nombreNuits}</span>
               </div>
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-slate-500 block mb-1">Enfants exempts</span>
-                <span className="font-extrabold text-green-600 text-sm">{result.nombreEnfantsExoneres} (Gratuit)</span>
+                <span className="text-[10px] uppercase tracking-widest text-slate-500 block mb-1">{t("calc_exempt_children")}</span>
+                <span className="font-extrabold text-green-600 text-sm">{result.nombreEnfantsExoneres} ({t("calc_free")})</span>
               </div>
             </div>
 
             {result.prixParPersonneParNuit > 0 && (
               <div className="bg-white p-4 border border-black/30 text-xs">
-                <span className="text-slate-500 block uppercase tracking-wider text-[9px] mb-1">Loyer HT / voyageur / nuit :</span>
+                <span className="text-slate-500 block uppercase tracking-wider text-[9px] mb-1">{t("calc_rent_per_traveler_night")}</span>
                 <span className="font-mono text-black text-sm font-bold">{result.prixParPersonneParNuit.toFixed(2)} €</span>
               </div>
             )}
@@ -959,7 +1017,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                 className="flex items-center justify-center gap-1.5 bg-black hover:bg-[#d1121d] text-white py-2.5 px-3 text-xs uppercase tracking-wider font-extrabold cursor-pointer transition-all"
               >
                 {copied ? <Check className="h-3.5 w-3.5 text-green-400" /> : <Copy className="h-3.5 w-3.5" />}
-                <span>{copied ? "Copié !" : "Copier"}</span>
+                <span>{copied ? t("calc_copied") : t("calc_copy")}</span>
               </button>
               
               <button
@@ -968,7 +1026,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                 className="flex items-center justify-center gap-1.5 bg-black hover:bg-[#d1121d] text-white py-2.5 px-3 text-xs uppercase tracking-wider font-extrabold cursor-pointer transition-all"
               >
                 {shared ? <Check className="h-3.5 w-3.5 text-green-400" /> : <Share2 className="h-3.5 w-3.5" />}
-                <span>{shared ? "Partagé !" : "Partager"}</span>
+                <span>{shared ? t("calc_shared") : t("calc_share")}</span>
               </button>
 
               <button
@@ -986,7 +1044,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
                 className="col-span-1 flex items-center justify-center gap-1.5 bg-black hover:bg-[#d1121d] text-white py-2.5 px-3 text-xs uppercase tracking-wider font-extrabold cursor-pointer transition-all"
               >
                 <Printer className="h-3.5 w-3.5" />
-                <span>Imprimer</span>
+                <span>{t("calc_print")}</span>
               </button>
             </div>
           </div>
@@ -994,7 +1052,7 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
           {/* Formulation steps */}
           <div className="border border-black p-6 space-y-6 bg-white transition-colors print:border-black print:p-6 print:text-black">
             <h3 className="text-xs font-black text-black uppercase tracking-wider border-b border-black pb-3">
-              Formulation Étape par Étape
+              {t("formulation_title")}
             </h3>
 
             <div className="space-y-6">
@@ -1023,10 +1081,10 @@ Simulation réalisée anonymement sur https://sejourtaxe.com`;
             <div className="bg-white border-l-2 border-[#d1121d] p-4 text-xs text-slate-500 space-y-2 print:border-black print:bg-slate-50 border border-black/15">
               <div className="flex gap-1.5 text-[#d1121d] font-bold uppercase tracking-wider text-[10px]">
                 <AlertTriangle className="h-4 w-4 shrink-0" />
-                <span>Notice d'usage légal</span>
+                <span>{t("legal_notice_title")}</span>
               </div>
               <p className="leading-relaxed">
-                Ce simulateur applique scrupuleusement les barèmes de taxes départementales et régionales françaises votés en 2026. Vérifiez toujours auprès des services officiels de votre collectivité pour vos déclarations de reversement.
+                {t("legal_notice_text_short")}
               </p>
             </div>
           </div>
