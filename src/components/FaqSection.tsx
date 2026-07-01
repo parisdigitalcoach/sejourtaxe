@@ -44,6 +44,14 @@ export default function FaqSection() {
         {
           question: "Airbnb collecte-t-il automatiquement la taxe de séjour ?",
           answer: "Oui, les plateformes de réservation en ligne (comme Airbnb, Booking.com, Abritel) ont l'obligation légale de collecter automatiquement la taxe de séjour lors du paiement en ligne et de la reverser directement aux collectivités, dès lors que la commune applique un tarif fixe ou au pourcentage et que la transaction est finalisée sur leur site. Si la réservation se fait en direct ou hors plateforme, c'est au propriétaire / hébergeur de la percevoir et de la déclarer manuellement."
+        },
+        {
+          question: "Quel est l'impact de la taxe de séjour sur l'investissement immobilier locatif (achat maison ou appartement en location saisonnière) ?",
+          answer: "Pour un investisseur locatif, l'achat d'une maison ou d'un appartement destiné au tourisme et à la location saisonnière de vacances exige d'anticiper la taxe de séjour. Elle influe directement sur le rendement locatif net et la gestion locative globale du bien. Lors de l'estimation immobilière d'un projet d'achat ou d'un calcul de rentabilité pour une vente immobilière, l'investisseur doit intégrer ces taux communaux et taxes additionnelles pour optimiser son plan de financement et son rendement d'investissement immobilier."
+        },
+        {
+          question: "Comment la taxe de séjour est-elle gérée dans la gestion locative professionnelle et l'estimation immobilière ?",
+          answer: "La gestion locative professionnelle de meublés de tourisme et de gîtes de vacances inclut la collecte et la déclaration rigoureuse des taxes de séjour locales. En cas de vente immobilière d'un bien immobilier de rendement, l'historique des déclarations de taxe de séjour sert de justificatif officiel de la performance touristique et de l'occupation réelle du logement, ce qui valorise l'estimation immobilière auprès d'un futur acquéreur ou d'une agence immobilière."
         }
       ]
     },
@@ -79,6 +87,14 @@ export default function FaqSection() {
         {
           question: "Does Airbnb automatically collect the tourist tax?",
           answer: "Yes, online booking platforms (such as Airbnb, Booking.com, Abritel) are legally required to automatically collect the tourist tax during online payment and transfer it directly to local authorities, as long as the municipality applies a fixed or percentage rate and the transaction is finalized on their website. If the booking is made directly with the host or outside of a platform, the owner / host is responsible for collecting and declaring it manually."
+        },
+        {
+          question: "How does the tourist tax impact real estate investment (buying a house or apartment for holiday rentals)?",
+          answer: "For real estate investors, purchasing a property (house or villa) for tourism or seasonal holiday rentals in France requires careful planning of the local tourist tax. It directly affects the net rental yield and the property management costs of the estate. When conducting a property valuation or estimating the returns on a real estate investment or potential real estate sale, including the local municipal tourist tax rates is crucial for a successful purchase and optimal investment performance."
+        },
+        {
+          question: "How is the tourist tax handled in professional property management and real estate valuation?",
+          answer: "Professional property management services for tourist accommodations handle the collection and reporting of the 'taxe de séjour'. When listing a property for a real estate sale, providing accurate, historical records of tourist tax payments serves as official proof of the rental history and commercial viability, which greatly enhances the property valuation for potential buyers or real estate agencies."
         }
       ]
     },
@@ -148,7 +164,15 @@ export default function FaqSection() {
         },
         {
           question: "¿Airbnb cobra automáticamente la tasa de estancia?",
-          answer: "Sí, las plataformas de reserva en línea (como Airbnb, Booking.com, Abritel) tienen la obligación legal de cobrar automáticamente la tasa de estancia durante el pago en línea y transferirla directamente a las administraciones locales, siempre que el municipio aplique una tarifa fija o un porcentaje y la transacción se finalice en su web. Si la reserva se realiza directamente o fuera de las plataformas, corresponde al propietario/anfitrión cobrarla y declararla manualmente."
+          answer: "Sí, las plataformas de reserva en línea (como Airbnb, Booking.com, Abritel) ont la obligación legal de cobrar automáticamente la tasa de estancia durante el pago en línea y transferirla directamente a las administraciones locales, siempre que el municipio aplique una tarifa fija o un porcentaje y la transacción se finalice en su web. Si la reserva se realiza directamente o fuera de las plataformas, corresponde al propietario/anfitrión cobrarla y declararla manualmente."
+        },
+        {
+          question: "¿Cómo afecta la tasa de estancia a la inversión inmobiliaria (compra de casa o apartamento para alquiler vacacional)?",
+          answer: "Para un inversor inmobiliario, la compra de una casa o apartamento destinado al turismo y alquiler de vacaciones requiere anticipar la tasa de estancia. Esto influye directamente en el rendimiento de la inversión neta y la gestión de la propiedad. Al realizar la valoración o estimación inmobiliaria de un proyecto de compra o venta de inmuebles de rendimiento, es esencial incluir estas tasas locales para optimizar el plan de financiación."
+        },
+        {
+          question: "¿Cómo se gestiona la tasa de estancia en la administración de propiedades y la valoración inmobiliaria?",
+          answer: "La gestión profesional de alquileres turísticos de apartamentos y casas de vacaciones incluye la recaudación y declaración rigurosa de las tasas de estancia locales. En caso de venta inmobiliaria de un alojamiento turístico, el historial de tasas pagadas sirve como justificante de rentabilidad real para los compradores, lo que mejora considerablemente la estimación de valor del inmueble por parte de las agencias inmobiliarias."
         }
       ]
     },

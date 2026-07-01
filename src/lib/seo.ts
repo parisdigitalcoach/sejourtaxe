@@ -24,23 +24,23 @@ export function updateSEO(currentPath: string) {
   }
 
   // Set default fallback values
-  let title = "Calculateur taxe de séjour France | SejourTaxe";
-  let description = "Calculez rapidement et simplement la taxe de séjour en France pour les locations de vacances, hôtels, gîtes ou chambres d'hôtes. Conforme 2026.";
-  let keywords = "taxe de sejour, calculateur taxe de sejour, simulation taxe de sejour, taxe sejour france, meuble de tourisme, tarif taxe de sejour";
+  let title = "SejourTaxe Professional French Tourist Tax Calculator | Immobilier & Tourisme";
+  let description = "Calculez et simulez la taxe de séjour en France (2026) pour vos projets d'investissement immobilier, achat de maison, gestion locative, meublés et gîtes de vacances.";
+  let keywords = "taxe de sejour, calculateur taxe de sejour, simulation taxe de sejour, taxe sejour france, meuble de tourisme, investissement immobilier, achat maison, gestion locative, estimation immobiliere";
   let pageName = "Accueil";
 
   const seoData: Record<string, Record<"fr" | "en" | "de" | "es" | "it" | "zh", { title: string; description: string; keywords: string; pageName: string }>> = {
     "/": {
       fr: {
-        title: "Calculateur taxe de séjour France 2026 | Simulez gratuitement",
-        description: "Calculez et simulez gratuitement la taxe de séjour en France pour les gîtes, meublés de tourisme, hôtels et campings. Conforme aux barèmes 2026 officiels.",
-        keywords: "taxe de sejour, calculateur taxe de sejour, simulation taxe de sejour, taxe sejour france, meuble de tourisme, tarif taxe de sejour, impots locaux",
+        title: "Calculateur taxe de séjour France 2026 | Immobilier, Achat Maison & Tourisme",
+        description: "Simulateur professionnel gratuit de taxe de séjour en France. Idéal pour investisseur locatif, achat de maison, gestion locative et estimation immobilière de gîtes ou meublés.",
+        keywords: "taxe de sejour, simulateur taxe de sejour, investissement immobilier locatif, achat maison, vente immobiliere, estimation immobiliere, gestion locative, rendement locatif, location saisonniere",
         pageName: "Accueil"
       },
       en: {
-        title: "French Tourist Tax Calculator 2026 | Free Online Simulator",
-        description: "Calculate the French tourist tax (taxe de séjour) for holiday rentals, hotels, villas and B&Bs. Free online simulator fully updated for 2026 regulations.",
-        keywords: "french tourist tax, tourist tax calculator, France holiday rental tax, taxe de sejour calculator, hotel tax France, villa tax simulator, stay tax",
+        title: "French Tourist Tax Calculator 2026 | Real Estate Investment & Property Sales",
+        description: "Free online French tourist tax simulator. Calculate rates for holiday rentals and optimize your real estate investment, rental yield, and property management performance.",
+        keywords: "french tourist tax, tourist tax calculator, real estate investment France, buy house France, property sales, rental yield, property valuation, seasonal rentals",
         pageName: "Home"
       },
       de: {
@@ -416,6 +416,22 @@ export function updateSEO(currentPath: string) {
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Il s'agit d'une taxe additionnelle régionale et transport instituée pour financer le réseau de transports en commun du Grand Paris (IDFM) qui s'ajoute à hauteur de 200% au tarif de base communal."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quel est l'impact de la taxe de séjour sur l'investissement immobilier locatif ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Pour un investisseur locatif, l'achat d'une maison ou d'un appartement destiné au tourisme et à la location saisonnière exige d'anticiper la taxe de séjour. Elle influe directement sur le rendement locatif net et la gestion locative globale du bien. Lors d'une estimation immobilière d'un projet d'achat ou d'une vente immobilière, il faut intégrer ces taux communaux pour optimiser la rentabilité."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment la taxe de séjour est-elle gérée dans l'estimation immobilière ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La gestion locative professionnelle de meublés de tourisme inclut la déclaration des taxes locales. En cas de vente immobilière d'un bien de rendement, l'historique de la taxe de séjour sert de justificatif de performance touristique, ce qui valorise l'estimation immobilière auprès d'une agence."
           }
         }
       ]
