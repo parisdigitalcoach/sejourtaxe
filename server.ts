@@ -9,6 +9,18 @@ dotenv.config();
 const app = express();
 const PORT = 3000;
 
+// Enforce HTTPS Redirection in Production (Cloud Run / Proxies)
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === "production") {
+    const proto = req.headers["x-forwarded-proto"];
+    if (proto && proto !== "https") {
+      console.log(`[HTTPS Redirect] Redirecting HTTP request to HTTPS: ${req.headers.host}${req.url}`);
+      return res.redirect(301, `https://${req.headers.host}${req.url}`);
+    }
+  }
+  next();
+});
+
 // Body parser
 app.use(express.json());
 
